@@ -15,11 +15,17 @@ public interface ISetParameter<TRequest, TResult>
 {
     IUseTransaction<TRequest, TResult> UseTransaction(TransactionScopeOption option = TransactionScopeOption.Required,
         System.Transactions.IsolationLevel isolationLevel = System.Transactions.IsolationLevel.ReadUncommitted);
+    
+    IValidation<TRequest, TResult> SetValidator(JValidatorBase<TRequest> validator);
+    
+    Task ExecutedAsync(Action<TResult> onResult);    
 }
 
 public interface IUseTransaction<TRequest, TResult>
 {
     IValidation<TRequest, TResult> SetValidator(JValidatorBase<TRequest> validator);
+    
+    Task ExecutedAsync(Action<TResult> onResult); 
 }
 
 public interface IValidation<TRequest, TResult>
