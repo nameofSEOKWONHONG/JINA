@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Jina.csproj" />
+      <ProjectReference Include="..\..\src\jina\Jina.csproj" />
     </ItemGroup>
 
 </Project>

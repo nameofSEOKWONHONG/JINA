@@ -13,7 +13,7 @@ public class Tests
     public void Setup()
     {
         var sc = new ServiceCollection();
-        sc.AddScoped<ITestService, TestService>();
+        sc.AddScoped<ITestService, TestJService>();
         _serviceProvider = sc.BuildServiceProvider();
     }
 
@@ -50,11 +50,11 @@ public interface ITestService
     
 }
 
-public class TestService
-    : ServiceImplBase<TestService, Request, string>
+public class TestJService
+    : JServiceImplBase<TestJService, Request, string>
         , ITestService
 {
-    public TestService()
+    public TestJService()
     {
         
     }

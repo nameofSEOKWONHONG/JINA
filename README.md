@@ -1,2 +1,2 @@
 # JINA
-J Infrastructure .Net Application
+**J** **I**nfrastructure for .**N**et **A**pplication
