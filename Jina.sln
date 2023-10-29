@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jina.Sql", "src\Jina.Sql\Ji
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jina.Lang", "src\Jina.Lang\Jina.Lang.csproj", "{F556997B-999E-4930-B5C3-00122B96996F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jina.Rule", "src\Jina.Rule\Jina.Rule.csproj", "{4AA5D9A8-B50A-4CDC-A22C-16FFB3E71E01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{F556997B-999E-4930-B5C3-00122B96996F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F556997B-999E-4930-B5C3-00122B96996F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F556997B-999E-4930-B5C3-00122B96996F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AA5D9A8-B50A-4CDC-A22C-16FFB3E71E01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AA5D9A8-B50A-4CDC-A22C-16FFB3E71E01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AA5D9A8-B50A-4CDC-A22C-16FFB3E71E01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AA5D9A8-B50A-4CDC-A22C-16FFB3E71E01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
