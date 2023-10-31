@@ -30,31 +30,41 @@ public class JRuleValidation
 
 public class RuleBuilder
 {
-    private readonly IEnumerable<RuleParameter> _row;
+    private readonly List<IEnumerable<RuleParameter>> _rows;
     private readonly IEnumerable<Rule> _rules;
+    
     public RuleBuilder(IEnumerable<RuleParameter> row
     , IEnumerable<Rule> rules)
     {
-        _row = row;
+        _rows = new List<IEnumerable<RuleParameter>> { row };
+        _rules = rules;
+    }
+
+    public RuleBuilder(List<IEnumerable<RuleParameter>> rows
+        , IEnumerable<Rule> rules)
+    {
+        _rows = rows;
         _rules = rules;
     }
     
-
-    public IEnumerable<RuleResult> Execute()
+    public IEnumerable<RuleResult> Validate()
     {
         List<RuleResult> ruleResults = new();
         
-        foreach (var row in _row)
+        foreach (var row in _rows)
         {
-            var selectedRule = _rules.First(m => row.RuleName == m.Name);
-            var result = selectedRule.Behavior(row.Value);
-            if (result.xIsFalse())
+            foreach (var col in row)
             {
-                ruleResults.Add(new RuleResult()
+                var selectedRule = _rules.First(m => col.RuleName == m.Name);
+                var result = selectedRule.Behavior(col.Value);
+                if (result.xIsFalse())
                 {
-                    PropertyName = row.Key,
-                    Message = string.Format(selectedRule.Message, row.Key)
-                });
+                    ruleResults.Add(new RuleResult()
+                    {
+                        PropertyName = col.Key,
+                        Message = string.Format(selectedRule.Message, col.Key)
+                    });
+                }    
             }
         }
 
