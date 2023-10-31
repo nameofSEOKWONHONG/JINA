@@ -40,7 +40,12 @@ where TSelf : class
                     // ReSharper disable once HeapView.BoxingAllocation
                     MaxDegreeOfParallelism = this._parallelCount.xValue<int>(Environment.ProcessorCount),
                     CancellationToken = stoppingToken
-                }, async (request, token) => { await OnConsumerAsync(request, token); });
+                }, async (request, token) =>
+                {
+                    token.ThrowIfCancellationRequested();
+                    await OnConsumerAsync(request, token);
+                    token.ThrowIfCancellationRequested();
+                });
             }
             catch (TaskCanceledException taskCanceledException)
             {

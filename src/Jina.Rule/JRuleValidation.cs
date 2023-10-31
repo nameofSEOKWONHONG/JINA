@@ -1,9 +1,14 @@
-﻿using System.Xml.XPath;
-using eXtensionSharp;
+﻿using eXtensionSharp;
+using Jina.ValidationRule.Models;
 
 namespace Jina.ValidationRule;
 
 public class JRuleValidation
+{
+    
+}
+
+public class Sample
 {
     public void Run()
     {
@@ -22,74 +27,12 @@ public class JRuleValidation
             RuleName = "NotEmpty"
         });
         var ruleBuilder = new RuleBuilder(row, rules);
-
-    }
-    
-    
-}
-
-public class RuleBuilder
-{
-    private readonly List<IEnumerable<RuleParameter>> _rows;
-    private readonly IEnumerable<Rule> _rules;
-    
-    public RuleBuilder(IEnumerable<RuleParameter> row
-    , IEnumerable<Rule> rules)
-    {
-        _rows = new List<IEnumerable<RuleParameter>> { row };
-        _rules = rules;
-    }
-
-    public RuleBuilder(List<IEnumerable<RuleParameter>> rows
-        , IEnumerable<Rule> rules)
-    {
-        _rows = rows;
-        _rules = rules;
-    }
-    
-    public IEnumerable<RuleResult> Validate()
-    {
-        List<RuleResult> ruleResults = new();
-        
-        foreach (var row in _rows)
+        if (ruleBuilder.TryValidate(out var results))
         {
-            foreach (var col in row)
+            foreach (var item in results)
             {
-                var selectedRule = _rules.First(m => col.RuleName == m.Name);
-                var result = selectedRule.Behavior(col.Value);
-                if (result.xIsFalse())
-                {
-                    ruleResults.Add(new RuleResult()
-                    {
-                        PropertyName = col.Key,
-                        Message = string.Format(selectedRule.Message, col.Key)
-                    });
-                }    
+                
             }
         }
-
-        return ruleResults;
     }
-}
-
-public class Rule
-{
-    public string Name { get; set; }
-
-    public Func<object, bool> Behavior { get; set; }
-    
-    public string Message { get; set; }
-}
-
-public class RuleParameter
-{
-    public string Key { get; set; }
-    public object Value { get; set; }
-    public string RuleName { get; set; }
-}
-
-public class RuleResult
-{
-    public string PropertyName { get; set; }
-    public string Message { get; set; }
 }
