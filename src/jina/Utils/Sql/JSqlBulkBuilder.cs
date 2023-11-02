@@ -87,7 +87,7 @@ public class JSqlBulkBuilder<T>
         {
             return cachedResult;
         }
-        var result = XAttributeExtensions.xGetSchemaAndTableName<T>();
+        var result = XReflectionExtentions.xGetSchemaAndTableName<T>();
         _assignTableStates.TryAdd(itemType, result);
         return result;
     }    

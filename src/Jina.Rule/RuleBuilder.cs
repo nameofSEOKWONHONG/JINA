@@ -6,17 +6,17 @@ namespace Jina.ValidationRule;
 public class RuleBuilder
 {
     private readonly List<IEnumerable<RuleParameter>> _rows;
-    private readonly IEnumerable<Rule> _rules;
+    private readonly IEnumerable<RulePattern> _rules;
     
     public RuleBuilder(IEnumerable<RuleParameter> row
-        , IEnumerable<Rule> rules)
+        , IEnumerable<RulePattern> rules)
     {
         _rows = new List<IEnumerable<RuleParameter>> { row };
         _rules = rules;
     }
 
     public RuleBuilder(List<IEnumerable<RuleParameter>> rows
-        , IEnumerable<Rule> rules)
+        , IEnumerable<RulePattern> rules)
     {
         _rows = rows;
         _rules = rules;

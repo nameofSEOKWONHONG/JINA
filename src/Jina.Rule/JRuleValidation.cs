@@ -1,5 +1,7 @@
 ﻿using eXtensionSharp;
 using Jina.ValidationRule.Models;
+using Jina.ValidationRule.Rules;
+using Jina.ValidationRule.Rules.Abstract;
 
 namespace Jina.ValidationRule;
 
@@ -12,13 +14,15 @@ public class Sample
 {
     public void Run()
     {
-        List<Rule> rules = new();
-        var rule = new Rule();
-        rule.Name = "NotEmpty";
-        rule.Behavior = o => o.xIsNotEmpty();
-        rule.Message = "{0} is empty";
-        rules.Add(rule);
+        var rulePatterns = new List<IRule>();
+        rulePatterns.Add(new NotEmptyRule());
 
+        var rules = new List<RulePattern>();
+        foreach (var rulePattern in rulePatterns)
+        {
+            rules.Add(rulePattern.Execute());
+        }
+        
         List<RuleParameter> row = new();
         row.Add(new RuleParameter()
         {
@@ -26,6 +30,7 @@ public class Sample
             Value = "",
             RuleName = "NotEmpty"
         });
+        
         var ruleBuilder = new RuleBuilder(row, rules);
         if (ruleBuilder.TryValidate(out var results))
         {

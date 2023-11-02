@@ -1,6 +1,6 @@
 namespace Jina.ValidationRule.Models;
 
-public class Rule
+public class RulePattern
 {
     public string Name { get; set; }
 
