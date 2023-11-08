@@ -7,13 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Ardalis.SmartEnum" Version="7.0.0" />
+      <PackageReference Include="Azure.Storage.Blobs" Version="12.19.0" />
       <PackageReference Include="Dapper" Version="2.1.15" />
       <PackageReference Include="eXtensionSharp" Version="1.0.0.4" />
       <PackageReference Include="FluentValidation" Version="11.8.0" />
+      <PackageReference Include="MailKit" Version="4.2.0" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+      <PackageReference Include="MimeKit" Version="4.2.0" />
       <PackageReference Include="MySql.Data" Version="8.2.0" />
       <PackageReference Include="Npgsql" Version="7.0.6" />
       <PackageReference Include="NRedisStack" Version="0.10.1" />
@@ -29,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Storage\" />
+      <Folder Include="Application\Base\" />
     </ItemGroup>
     
 </Project>
