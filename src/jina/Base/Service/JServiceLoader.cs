@@ -9,7 +9,7 @@ using Serilog;
 
 namespace Jina.Base.Service;
 
-public class JServiceLoader<TService, TRequest, TResult> : JDisposeBase
+public class JServiceLoader<TRequest, TResult> : JDisposeBase
     , IAddFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>
     , IUseTransaction<TRequest, TResult>

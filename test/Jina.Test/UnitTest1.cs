@@ -25,19 +25,16 @@ public class Tests
         string result = string.Empty;
         
         var service = _serviceProvider.GetService<ITestService>();
-        
-        await service.Invoke<ITestService, Request, string>()
+
+        JServiceInvoker<Request, string>.Invoke(service)
             .AddFilter(() => request.xIsNotEmpty())
-            .SetParameter(() => new ()
+            .SetParameter(() => new()
             {
                 Name = request
             })
             .SetValidator(new RequestValidator())
-            .OnValidated(r =>
-            {
-                result = r.Errors.Select(m => m.ErrorMessage).First();
-            })
-            .ExecutedAsync(r => result = r);
+            .OnValidated(r => result = r.Errors.Select(m => m.ErrorMessage).First())
+            .ExecutedAsync(r => result = r);;
         
         Assert.That(result, Is.EqualTo(expected));
     }

@@ -35,7 +35,7 @@ public abstract class JServiceImplBase<TSelf>
     }
 }
 
-public abstract partial class JServiceImplBase<TSelf, TRequest, TResult> 
+public abstract class JServiceImplBase<TSelf, TRequest, TResult> 
     : JServiceImplBase<TSelf>
         , IServiceImplBase<TRequest, TResult>
 {   
