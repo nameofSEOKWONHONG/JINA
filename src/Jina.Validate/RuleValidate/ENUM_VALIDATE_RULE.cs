@@ -9,5 +9,10 @@ namespace Jina.Validate.RuleValidate
     public enum ENUM_VALIDATE_RULE
     {
         NotEmpty,
+        GraterThen,
+        LessThen,
+        RRN,
+        Phone,
+        CellPhone,
     }
 }

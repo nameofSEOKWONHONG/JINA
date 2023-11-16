@@ -2,6 +2,7 @@ using eXtensionSharp;
 using Jina.Base.Service;
 using Jina.Base.Service.Abstract;
 using Jina.Validate;
+using Jina.Validate.RuleValidate;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -45,6 +46,40 @@ public class Tests
             .ExecutedAsync(r => result = r); ;
 
         Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void object_to_notempty()
+    {
+        object o = "";
+        Assert.IsTrue(o.xIsNotEmpty());
+    }
+
+    [Test]
+    public void rule_validator_test()
+    {
+        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateRequest()
+        {
+            ValidateRule = ENUM_VALIDATE_RULE.NotEmpty,
+            Key = "Name",
+            Value = "hello"
+        }, out var messageA))
+        {
+            Assert.That(messageA, Is.Not.Empty);
+            TestContext.Out.WriteLine(messageA);
+        }
+
+        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateRequest()
+        {
+            ValidateRule = ENUM_VALIDATE_RULE.GraterThen,
+            Key = "Age",
+            Value = 31,
+            CompareValue = 30
+        }, out var messageB))
+        {
+            Assert.That(messageB, Is.Not.Empty);
+            TestContext.Out.WriteLine(messageB);
+        }
     }
 }
 

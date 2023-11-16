@@ -7,7 +7,7 @@ namespace Jina.Validate.RuleValidate
     public class JRuleValidatorEngine
     {
         private static Lazy<JRuleValidatorEngine> _instance = new Lazy<JRuleValidatorEngine>(() => new JRuleValidatorEngine());
-        public static JRuleValidatorEngine EngineInstance => _instance.Value;
+        public static JRuleValidatorEngine Engine => _instance.Value;
 
         private readonly IEnumerable<IRuleValidator> _ruleValidators;
 
@@ -20,26 +20,19 @@ namespace Jina.Validate.RuleValidate
         {
             message = string.Empty;
 
-            var rule = _ruleValidators.First(m => m.ValidateRule == request.ValidateRule);
-
+            var rule = _ruleValidators.First(m => m.ValidateRule == request.ValidateRule).xAs<RuleValidatorBase>();
             rule.Prepare(null);
-            var result = rule.Execute(request.Key, request.Value);
-            if (result.IsVaild.xIsFalse())
-            {
-                message = result.Message;
-                return false;
-            }
-
-            return true;
+            var result = rule.Execute(request);
+            message = result.Message;
+            return result.IsVaild;
         }
 
         private IEnumerable<IRuleValidator> GetRules()
         {
             var type = typeof(IRuleValidator);
-
             var rules = Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(x => x.IsAssignableFrom(x) && !x.IsInterface)
+                .Where(x => type.IsAssignableFrom(x) && !x.IsInterface)
                 .Select(x => Activator.CreateInstance(x).xAs<IRuleValidator>())
                 .ToList();
 

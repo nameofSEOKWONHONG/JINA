@@ -11,7 +11,8 @@ namespace Jina.Validate.RuleValidate.Abstract
     {
         public ENUM_VALIDATE_RULE ValidateRule { get; set; }
         public string Key { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
+        public object CompareValue { get; set; }
     }
 
     public class RuleValidateResult

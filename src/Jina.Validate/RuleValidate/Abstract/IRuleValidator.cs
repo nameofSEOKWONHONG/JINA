@@ -10,9 +10,5 @@ namespace Jina.Validate.RuleValidate.Abstract
     public interface IRuleValidator
     {
         ENUM_VALIDATE_RULE ValidateRule { get; }
-
-        void Prepare(ILocalizer localizer);
-
-        RuleValidateResult Execute(string key, object o);
     }
 }

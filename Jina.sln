@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Lang", "src\Jina.Lang\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Validate", "src\Jina.Validate\Jina.Validate.csproj", "{FF7F8CC9-BC5B-4600-9BC6-101271CAD425}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jina.Test", "src\Jina.Test\Jina.Test.csproj", "{48F042DC-FA31-4978-822A-93E0EE49D87D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Test", "src\Jina.Test\Jina.Test.csproj", "{48F042DC-FA31-4978-822A-93E0EE49D87D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eXtensionSharp", "..\eXtensionSharp\src\eXtensionSharp.csproj", "{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
