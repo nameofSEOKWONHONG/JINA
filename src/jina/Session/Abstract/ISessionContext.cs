@@ -7,15 +7,15 @@
 /// 비고 :
 /// 수정내역 :
 /// </summary>
-public interface ISessionContextBase
+public interface ISessionContext
 {
     public string TenantId { get; set; }
     /// <summary>
     /// Token 정보 중 사용자 정보
     /// </summary>
-    public ISessionCurrentUserBase CurrentUser { get; }
+    public ISessionCurrentUser CurrentUser { get; }
     /// <summary>
     /// UTC 타임 정보
     /// </summary>
-    public ISessionDateTimeBase CurrentTime { get; }
+    public ISessionDateTime CurrentTime { get; }
 }

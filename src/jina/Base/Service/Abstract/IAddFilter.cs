@@ -1,8 +1,4 @@
-﻿using System.Transactions;
-using FluentValidation.Results;
-using Jina.Base.Validator;
-
-namespace Jina.Base.Service.Abstract;
+﻿namespace Jina.Base.Service.Abstract;
 
 public interface IAddFilter<TRequest, TResult>
 {
@@ -10,10 +6,3 @@ public interface IAddFilter<TRequest, TResult>
 
     ISetParameter<TRequest, TResult> SetParameter(Func<TRequest> onParameter);
 }
-
-
-
-
-
-
-

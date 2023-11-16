@@ -1,14 +1,22 @@
 using eXtensionSharp;
 using Jina.Base.Service;
 using Jina.Base.Service.Abstract;
-using Jina.Base.Validator;
+using Jina.Validate;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Jina.Test;
 
 public class Tests
-{   
-    ServiceProvider _serviceProvider;
+{
+#pragma warning disable NUnit1032
+    private ServiceProvider _serviceProvider;
+#pragma warning restore NUnit1032
+
+    public Tests()
+    {
+    }
+
     [SetUp]
     public void Setup()
     {
@@ -23,10 +31,10 @@ public class Tests
         var expected = "Hello, Jina";
         var request = "Jina";
         string result = string.Empty;
-        
+
         var service = _serviceProvider.GetService<ITestService>();
 
-        JServiceInvoker<Request, string>.Invoke(service)
+        await JServiceInvoker<Request, string>.Invoke(service)
             .AddFilter(() => request.xIsNotEmpty())
             .SetParameter(() => new()
             {
@@ -34,8 +42,8 @@ public class Tests
             })
             .SetValidator(new RequestValidator())
             .OnValidated(r => result = r.Errors.Select(m => m.ErrorMessage).First())
-            .ExecutedAsync(r => result = r);;
-        
+            .ExecutedAsync(r => result = r); ;
+
         Assert.That(result, Is.EqualTo(expected));
     }
 }
@@ -44,7 +52,6 @@ public interface ITestService
     : IServiceImplBase<Request, string>
         , IScopeService
 {
-    
 }
 
 public class TestJService
@@ -53,9 +60,8 @@ public class TestJService
 {
     public TestJService()
     {
-        
     }
-    
+
     public override Task<bool> OnExecutingAsync()
     {
         if (this.Request.xIsEmpty())
@@ -69,7 +75,7 @@ public class TestJService
             this.Result = "failed";
             return Task.FromResult(false);
         }
-        
+
         return Task.FromResult(true);
     }
 
@@ -85,11 +91,10 @@ public class Request
     public string Name { get; set; }
 }
 
-public class RequestValidator : JValidatorBase<Request>
+public class RequestValidator : JValidator<Request>
 {
     public RequestValidator()
     {
         NotEmpty(m => m.Name);
     }
 }
- 

@@ -6,7 +6,7 @@ using eXtensionSharp;
 using Jina.Base.Data;
 using Jina.Utils.Pooling;
 
-namespace Jina.Utils.Sql;
+namespace Jina.Sql;
 
 public class JSqlBulkBuilder<T>
     where T : class

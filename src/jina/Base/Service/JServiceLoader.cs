@@ -3,7 +3,7 @@ using System.Transactions;
 using eXtensionSharp;
 using FluentValidation.Results;
 using Jina.Base.Service.Abstract;
-using Jina.Base.Validator;
+using Jina.Validate;
 using Microsoft.Extensions.Caching.Distributed;
 using Serilog;
 
@@ -17,37 +17,37 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
     , IExecutor<TRequest, TResult>
 {
     private readonly IServiceImplBase<TRequest, TResult> _service;
-    
+
     #region [action behavior's]
 
-    private List<Func<bool>> _filters = new ();
+    private List<Func<bool>> _filters = new();
     private Func<TRequest> _parameter;
-    private JValidatorBase<TRequest> _validator;
+    private JValidator<TRequest> _validator;
     private Action<ValidationResult> _validateBehavior;
 
-    #endregion
-    
+    #endregion [action behavior's]
+
     #region [database transaction]
-    
+
     private bool _useTransaction;
     private System.Transactions.IsolationLevel _isolationLevel;
     private TransactionScopeOption _transactionScopeOption;
-    
-    #endregion
-    
+
+    #endregion [database transaction]
+
     #region [cache]
 
     private IDistributedCache _cache;
     private string _cacheKey;
     private DistributedCacheEntryOptions _cacheEntryOptions;
 
-    #endregion
+    #endregion [cache]
 
     internal JServiceLoader(IServiceImplBase<TRequest, TResult> service)
     {
         _service = service;
     }
-    
+
     public IAddFilter<TRequest, TResult> AddFilter(Func<bool> onFilter)
     {
         this._filters.Add(onFilter);
@@ -68,8 +68,8 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
         _isolationLevel = isolationLevel;
         return this;
     }
-    
-    public IValidation<TRequest, TResult> SetValidator(JValidatorBase<TRequest> validator)
+
+    public IValidation<TRequest, TResult> SetValidator(JValidator<TRequest> validator)
     {
         _validator = validator;
         return this;
@@ -79,7 +79,7 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
     {
         _validateBehavior = validateBehavior;
         return this;
-    }    
+    }
 
     public async Task ExecutedAsync(Action<TResult> onResult)
     {
@@ -97,7 +97,7 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
             catch (Exception e)
             {
                 Log.Logger.Error(e, "ServiceLoader OnExecuted Error : {Error}", e.Message);
-                throw;                    
+                throw;
             }
         }
         else
@@ -105,13 +105,13 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
             await ExecuteCore(onResult);
         }
         sw.Stop();
-        #if DEBUG
+#if DEBUG
         Log.Logger.Information("{ServiceName} execute time(sec):{Second}", _service.GetType().Name, sw.Elapsed.TotalSeconds);
-        #endif
+#endif
     }
 
-
     #region [execute core]
+
     private async Task ExecuteCore(Action<TResult> resultBehavior = null)
     {
         if (InvokedFilter().xIsFalse()) return;
@@ -119,7 +119,7 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
         InvokedParameter();
 
         var valid = await InvokedValidatingAsync(_service.Request);
-        if(valid.xIsFalse()) return;
+        if (valid.xIsFalse()) return;
 
         await GetCacheAsync();
 
@@ -127,7 +127,7 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
 
         await SetCacheAsync();
     }
-    
+
     private bool InvokedFilter()
     {
         var filterValid = true;
@@ -179,7 +179,7 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
                 {
                     _service.Result = exist;
                 }
-            }    
+            }
         }
     }
 
@@ -203,9 +203,9 @@ public class JServiceLoader<TRequest, TResult> : JDisposeBase
             if (_service.Result.xIsNotEmpty())
             {
                 await _cache.SetAsync(_cacheKey.xGetHashCode(), _service.Result.xToBytes(), _cacheEntryOptions);
-            }    
+            }
         }
-    }    
+    }
 
-    #endregion
+    #endregion [execute core]
 }

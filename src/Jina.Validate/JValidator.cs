@@ -2,11 +2,11 @@
 using eXtensionSharp;
 using FluentValidation;
 
-namespace Jina.Base.Validator;
+namespace Jina.Validate;
 
-public abstract class JValidatorBase<T> : AbstractValidator<T>
+public abstract class JValidator<T> : AbstractValidator<T>
 {
-    protected JValidatorBase()
+    protected JValidator()
     {
     }
 
@@ -30,7 +30,7 @@ public abstract class JValidatorBase<T> : AbstractValidator<T>
     }
 
     protected void MaxLength(Expression<Func<T, string>> expression, int maxLimit)
-    {   
+    {
         var rule = RuleFor(expression);
         rule.MaximumLength(maxLimit)
             ;
@@ -51,15 +51,15 @@ public abstract class JValidatorBase<T> : AbstractValidator<T>
         }
     }
 
-    protected void GreaterThan<TProperty>(Expression<Func<T, TProperty>> expression, TProperty limit) 
+    protected void GreaterThan<TProperty>(Expression<Func<T, TProperty>> expression, TProperty limit)
         where TProperty : IComparable<TProperty>, IComparable
     {
         RuleFor(expression)
             .GreaterThan(limit)
             ;
     }
-    
-    protected void LessThan<TProperty>(Expression<Func<T, TProperty>> expression, TProperty limit) 
+
+    protected void LessThan<TProperty>(Expression<Func<T, TProperty>> expression, TProperty limit)
         where TProperty : IComparable<TProperty>, IComparable
     {
         RuleFor(expression)

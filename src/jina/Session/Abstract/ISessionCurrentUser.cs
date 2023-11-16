@@ -1,6 +1,6 @@
 ﻿namespace Jina.Session.Abstract;
 
-public interface ISessionCurrentUserBase
+public interface ISessionCurrentUser
 {
     string TenantId { get; }
     string TimeZone { get; }

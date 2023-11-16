@@ -30,7 +30,7 @@ SET NOCOUNT ON;
         {
             if (query.ToUpper().Contains("WITH(NOLOCK)").xIsFalse())
             {
-                throw new Exception("You must use nonblocking keyword. (ex: FROM SYSUSER A WITH(NOLOCK)");
+                throw new Exception("You must use nonblocking keyword. (ex: FROM USER A WITH(NOLOCK)");
             }            
         }
         return SELECT_QUERY_TEMPLATE.Replace(QUERY_CODE, query);

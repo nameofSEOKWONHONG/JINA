@@ -1,6 +1,6 @@
 ﻿namespace Jina.Session.Abstract;
 
-public interface ISessionDateTimeBase
+public interface ISessionDateTime
 {
     DateTime Now { get; }
     DateTime ToLocal(DateTime utc);

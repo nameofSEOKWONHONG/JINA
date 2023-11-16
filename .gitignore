@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.idea/.idea.Jina/.idea/.name
+/.idea/.idea.Jina/.idea/indexLayout.xml
+/.idea/.idea.Jina/.idea/projectSettingsUpdater.xml
+/.idea/.idea.Jina/.idea/vcs.xml
+/.idea/.idea.Jina/.idea/workspace.xml

@@ -2,18 +2,18 @@
 
 namespace Jina.Session;
 
-public class SessionContextBase : ISessionContextBase
+public class SessionContextBase : ISessionContext
 {
     public string TenantId { get; set; }
-    public ISessionCurrentUserBase CurrentUser { get; }
-    public ISessionDateTimeBase CurrentTime { get; }
+    public ISessionCurrentUser CurrentUser { get; }
+    public ISessionDateTime CurrentTime { get; }
 
     public SessionContextBase(string tenantId
-        , ISessionCurrentUserBase currentUser
-        , ISessionDateTimeBase dateTimeBase)
+        , ISessionCurrentUser currentUser
+        , ISessionDateTime dateTime)
     {
         TenantId = tenantId;
         CurrentUser = currentUser;
-        CurrentTime = dateTimeBase;
+        CurrentTime = dateTime;
     }
 }
