@@ -18,13 +18,26 @@ namespace Jina.Validate.RuleValidate
 
         public bool TryValidate(RuleValidateRequest request, out string message)
         {
-            message = string.Empty;
-
             var rule = _ruleValidators.First(m => m.ValidateRule == request.ValidateRule).xAs<RuleValidatorBase>();
             rule.Prepare(null);
             var result = rule.Execute(request);
             message = result.Message;
             return result.IsVaild;
+        }
+
+        public bool TryValidates(IEnumerable<RuleValidateRequest> requests, out string message)
+        {
+            foreach (var item in requests)
+            {
+                if (TryValidate(item, out var msg))
+                {
+                    message = msg;
+                    return true;
+                }
+            }
+
+            message = string.Empty;
+            return false;
         }
 
         private IEnumerable<IRuleValidator> GetRules()

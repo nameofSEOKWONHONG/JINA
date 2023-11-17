@@ -3,31 +3,31 @@ using Jina.Database.Abstract;
 
 namespace Jina.Base.Service;
 
-public abstract class JServiceImplBase<TSelf>
+public abstract class ServiceImplBase<TSelf>
 {
     protected IDbProvider Db;
     protected IHttpClientFactory HttpClientFactory;
-    
+
     protected Serilog.ILogger Logger => Serilog.Log.Logger;
-    
-    protected JServiceImplBase()
+
+    protected ServiceImplBase()
     {
         this.Logger.Debug("Create Instance : {Instance}", typeof(TSelf).Name);
     }
 
-    protected JServiceImplBase(IDbProvider db)
+    protected ServiceImplBase(IDbProvider db)
     {
         this.Db = db;
         this.Logger.Debug("Create Instance With IDbProvider : {Instance}", typeof(TSelf).Name);
     }
 
-    protected JServiceImplBase(IHttpClientFactory httpClientFactory)
+    protected ServiceImplBase(IHttpClientFactory httpClientFactory)
     {
         this.HttpClientFactory = httpClientFactory;
         this.Logger.Debug("Create Instance With IDbProvider : {Instance}", typeof(TSelf).Name);
     }
-    
-    protected JServiceImplBase(IDbProvider db, IHttpClientFactory httpClientFactory)
+
+    protected ServiceImplBase(IDbProvider db, IHttpClientFactory httpClientFactory)
     {
         this.Db = db;
         this.HttpClientFactory = httpClientFactory;
@@ -35,32 +35,27 @@ public abstract class JServiceImplBase<TSelf>
     }
 }
 
-public abstract class JServiceImplBase<TSelf, TRequest, TResult> 
-    : JServiceImplBase<TSelf>
+public abstract class ServiceImplBase<TSelf, TRequest, TResult>
+    : ServiceImplBase<TSelf>
         , IServiceImplBase<TRequest, TResult>
-{   
-    protected JServiceImplBase() : base()
+{
+    protected ServiceImplBase() : base()
     {
-        
     }
 
-    protected JServiceImplBase(IDbProvider db) : base(db)
+    protected ServiceImplBase(IDbProvider db) : base(db)
     {
-        
     }
-    
 
-    protected JServiceImplBase(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    protected ServiceImplBase(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
     {
-        
     }
-    
-    protected JServiceImplBase(IDbProvider db, IHttpClientFactory httpClientFactory) 
+
+    protected ServiceImplBase(IDbProvider db, IHttpClientFactory httpClientFactory)
         : base(db, httpClientFactory)
     {
-        
     }
-    
+
     public abstract Task<bool> OnExecutingAsync();
 
     public abstract Task OnExecuteAsync();
