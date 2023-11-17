@@ -1,10 +1,10 @@
 namespace Jina.Base;
 
-public class JDisposeBase : IDisposable
+public class DisposeBase : IDisposable
 {
     private bool _disposed;
     
-    ~JDisposeBase() => Dispose(false);
+    ~DisposeBase() => Dispose(false);
 
     public void Dispose()
     {

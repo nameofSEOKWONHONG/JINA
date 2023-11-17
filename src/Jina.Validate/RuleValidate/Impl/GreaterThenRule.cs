@@ -9,16 +9,20 @@ namespace Jina.Validate.RuleValidate.Impl
     {
         public ENUM_VALIDATE_RULE ValidateRule => ENUM_VALIDATE_RULE.GraterThen;
 
-        public override RuleValidateResult Execute(RuleValidateRequest request)
+        public override RuleValidateResult Execute(RuleValidateOption option)
         {
-            var result = request.CompareValue.xValue<Int32>() < request.Value.xValue<Int32>();
+            var result = option.CompareValue.xValue<double>() < option.Value.xValue<double>();
 
             return new RuleValidateResult()
             {
                 IsVaild = !result,
-                Message = Localizer.xIsNotEmpty()
-                    ? Localizer[""].xValue($"{request.Key}(은)는 {request.CompareValue} 보다 커야 합니다.")
-                    : $"{request.Key}(은)는 {request.CompareValue} 보다 커야 합니다."
+                Message = result.xIsFalse()
+                    ? option.CustomMessage.xIsNotEmpty()
+                        ? option.CustomMessage
+                            : Localizer.xIsNotEmpty()
+                                ? Localizer[""]
+                                    : $"{option.Key}(은)는 {option.CompareValue} 보다 커야 합니다."
+                    : string.Empty
             };
         }
     }

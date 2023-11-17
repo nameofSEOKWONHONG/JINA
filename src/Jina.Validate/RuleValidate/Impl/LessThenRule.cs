@@ -1,16 +1,24 @@
 ﻿using eXtensionSharp;
-using Jina.Lang.Abstract;
 using Jina.Validate.RuleValidate.Abstract;
+using Microsoft.VisualBasic.FileIO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Jina.Validate.RuleValidate.Impl
 {
-    public class NotEmptyRule : RuleValidatorBase, IRuleValidator
+    public class LessThenRule : RuleValidatorBase, IRuleValidator
     {
-        public ENUM_VALIDATE_RULE ValidateRule => ENUM_VALIDATE_RULE.NotEmpty;
+        public ENUM_VALIDATE_RULE ValidateRule => ENUM_VALIDATE_RULE.LessThen;
+
+        public LessThenRule()
+        { }
 
         public override RuleValidateResult Execute(RuleValidateOption option)
         {
-            var result = option.Value.xIsNotEmpty();
+            var result = option.CompareValue.xValue<double>() > option.Value.xValue<double>();
 
             return new RuleValidateResult()
             {
@@ -20,7 +28,7 @@ namespace Jina.Validate.RuleValidate.Impl
                         ? option.CustomMessage
                             : Localizer.xIsNotEmpty()
                                 ? Localizer[""]
-                                    : $"{option.Key}(은)는 빈값일 수 없습니다."
+                                    : $"{option.Key}(은)는 {option.CompareValue} 보다 작아야 합니다."
                     : string.Empty
             };
         }

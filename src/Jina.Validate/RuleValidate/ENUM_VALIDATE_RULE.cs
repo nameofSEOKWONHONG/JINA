@@ -14,5 +14,6 @@ namespace Jina.Validate.RuleValidate
         RRN,
         Phone,
         CellPhone,
+        Email
     }
 }

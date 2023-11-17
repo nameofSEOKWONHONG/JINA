@@ -20,6 +20,6 @@ namespace Jina.Validate.RuleValidate.Abstract
             this.Localizer = localizer;
         }
 
-        public abstract RuleValidateResult Execute(RuleValidateRequest request);
+        public abstract RuleValidateResult Execute(RuleValidateOption request);
     }
 }
