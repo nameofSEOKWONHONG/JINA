@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json;
 
@@ -13,8 +12,9 @@ public class JLocalizerLoader
 
     private const string LANG_PATH_NAME = "language";
     private readonly string LANG_PATH = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LANG_PATH_NAME);
-    public ConcurrentDictionary<string, Dictionary<string, string>> Loader { get; private set; } = new();
-
+    public Dictionary<string, Dictionary<string, string>> Loader { get; private set; } = new();
+    public static object _sync = new();
+    
     private JLocalizerLoader()
     {
         ReadLanguageFile();
@@ -22,15 +22,19 @@ public class JLocalizerLoader
 
     private void ReadLanguageFile()
     {
-        if (Loader.Count > 0) Loader.Clear();
-
+        var newLoader = new Dictionary<string, Dictionary<string, string>>();
         var files = Directory.GetFiles(LANG_PATH);
         foreach (var file in files)
         {
             var jsonData = File.ReadAllText(file, Encoding.UTF8);
             var map = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonData);
 
-            Loader.TryAdd(Path.GetFileNameWithoutExtension(file), map);
+            newLoader.TryAdd(Path.GetFileNameWithoutExtension(file), map);
+        }
+
+        lock (_sync)
+        {
+            Loader = newLoader;    
         }
     }
 }
