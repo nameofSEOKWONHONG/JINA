@@ -63,10 +63,12 @@ public class JSqlBulkBuilder<T>
     private string[] AssignColumn(T item)
     {
         Type itemType = typeof(T);
+#pragma warning disable CS8600 // null 리터럴 또는 가능한 null 값을 null을 허용하지 않는 형식으로 변환하는 중입니다.
         if (_assignColumnStates.TryGetValue(itemType, out string[] cachedColumns))
         {
             return cachedColumns;
         }
+#pragma warning restore CS8600 // null 리터럴 또는 가능한 null 값을 null을 허용하지 않는 형식으로 변환하는 중입니다.
         var columns = new List<string>();
         var props = item.xGetProperties();
         props.xForEach(prop =>
@@ -137,6 +139,7 @@ public class JSqlBulkBuilder<T>
                 var exist = columns.xFirst(m => m == prop.Name);
                 if (exist.xIsEmpty()) return true;
 
+#pragma warning disable CS8600 // null 리터럴 또는 가능한 null 값을 null을 허용하지 않는 형식으로 변환하는 중입니다.
                 if(_datumStates.TryGetValue(prop.PropertyType.ToString(), out Func<PropertyInfo, object, string> x))
                 {
                     // ReSharper disable once AccessToModifiedClosure
@@ -146,6 +149,7 @@ public class JSqlBulkBuilder<T>
                 {
                     statement.Append(_datumStates["Default"](prop, item));
                 }
+#pragma warning restore CS8600 // null 리터럴 또는 가능한 null 값을 null을 허용하지 않는 형식으로 변환하는 중입니다.
                 return true;
             });
             var valueSql = statement.ToString();

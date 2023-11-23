@@ -22,10 +22,14 @@ public static class JSqlExtensions
     public static IHost UseJinaJSql(this IHost host)
     {
         var engine = host.Services.GetService<JSqlReader>();
+#pragma warning disable CS8602 // null 가능 참조에 대한 역참조입니다.
         engine.Initialize();
+#pragma warning restore CS8602 // null 가능 참조에 대한 역참조입니다.
         
         var timer = host.Services.GetService<JSqlTimer>();
+#pragma warning disable CS8602 // null 가능 참조에 대한 역참조입니다.
         timer.Initialize();
+#pragma warning restore CS8602 // null 가능 참조에 대한 역참조입니다.
         return host;
     }
 }

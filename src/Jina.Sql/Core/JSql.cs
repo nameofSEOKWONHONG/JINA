@@ -83,7 +83,9 @@ public sealed class JSql
     {
         var sql = this.Sql(name, o);
         var result = await connection.QueryFirstOrDefaultAsync<T>(sql, o, commandType:commandType);
+#pragma warning disable CS8603 // 가능한 null 참조 반환입니다.
         return result;
+#pragma warning restore CS8603 // 가능한 null 참조 반환입니다.
     }
 
     public async Task<int> ExecuteAsync(IDbConnection connection, string name, object o

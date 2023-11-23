@@ -10,5 +10,5 @@ public interface ISetParameter<TRequest, TResult>
 
     IValidation<TRequest, TResult> SetValidator(JValidator<TRequest> validator);
 
-    Task ExecutedAsync(Action<TResult> onResult);
+    Task OnExecutedAsync(Action<TResult> onResult);
 }

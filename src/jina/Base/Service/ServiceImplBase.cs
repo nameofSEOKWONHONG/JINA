@@ -5,7 +5,7 @@ namespace Jina.Base.Service;
 
 public abstract class ServiceImplBase<TSelf>
 {
-    protected IDbProvider Db;
+    protected IDbProvider DbProvider;
     protected IHttpClientFactory HttpClientFactory;
 
     protected Serilog.ILogger Logger => Serilog.Log.Logger;
@@ -17,7 +17,7 @@ public abstract class ServiceImplBase<TSelf>
 
     protected ServiceImplBase(IDbProvider db)
     {
-        this.Db = db;
+        this.DbProvider = db;
         this.Logger.Debug("Create Instance With IDbProvider : {Instance}", typeof(TSelf).Name);
     }
 
@@ -29,7 +29,7 @@ public abstract class ServiceImplBase<TSelf>
 
     protected ServiceImplBase(IDbProvider db, IHttpClientFactory httpClientFactory)
     {
-        this.Db = db;
+        this.DbProvider = db;
         this.HttpClientFactory = httpClientFactory;
         this.Logger.Debug("Create Instance With IDbProvider And IPartnerAuthenticationHandler : {Instance}", typeof(TSelf).Name);
     }

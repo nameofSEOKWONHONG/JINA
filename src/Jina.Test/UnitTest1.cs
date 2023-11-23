@@ -5,6 +5,7 @@ using Jina.Validate;
 using Jina.Validate.RuleValidate;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Jina.Test.Services;
 
 namespace Jina.Test;
 
@@ -35,7 +36,7 @@ public class Tests
 
         var service = _serviceProvider.GetService<ITestService>();
 
-        await JServiceInvoker<Request, string>.Invoke(service)
+        await ServiceInvoker<Request, string>.Invoke(service)
             .AddFilter(() => request.xIsNotEmpty())
             .SetParameter(() => new()
             {
@@ -43,7 +44,7 @@ public class Tests
             })
             .SetValidator(new RequestValidator())
             .OnValidated(r => result = r.Errors.Select(m => m.ErrorMessage).First())
-            .ExecutedAsync(r => result = r); ;
+            .OnExecutedAsync(r => result = r); ;
 
         Assert.That(result, Is.EqualTo(expected));
     }
@@ -58,7 +59,7 @@ public class Tests
     [Test]
     public void rule_validator_test()
     {
-        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateRequest()
+        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
         {
             ValidateRule = ENUM_VALIDATE_RULE.NotEmpty,
             Key = "Name",
@@ -69,7 +70,7 @@ public class Tests
             TestContext.Out.WriteLine(messageA);
         }
 
-        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateRequest()
+        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
         {
             ValidateRule = ENUM_VALIDATE_RULE.GraterThen,
             Key = "Age",
@@ -80,56 +81,5 @@ public class Tests
             Assert.That(messageB, Is.Not.Empty);
             TestContext.Out.WriteLine(messageB);
         }
-    }
-}
-
-public interface ITestService
-    : IServiceImplBase<Request, string>
-        , IScopeService
-{
-}
-
-public class TestJService
-    : JServiceImplBase<TestJService, Request, string>
-        , ITestService
-{
-    public TestJService()
-    {
-    }
-
-    public override Task<bool> OnExecutingAsync()
-    {
-        if (this.Request.xIsEmpty())
-        {
-            this.Result = "failed";
-            return Task.FromResult(false);
-        }
-
-        if (this.Request.Name.xIsEmpty())
-        {
-            this.Result = "failed";
-            return Task.FromResult(false);
-        }
-
-        return Task.FromResult(true);
-    }
-
-    public override Task OnExecuteAsync()
-    {
-        this.Result = $"Hello, {this.Request.Name}";
-        return Task.CompletedTask;
-    }
-}
-
-public class Request
-{
-    public string Name { get; set; }
-}
-
-public class RequestValidator : JValidator<Request>
-{
-    public RequestValidator()
-    {
-        NotEmpty(m => m.Name);
     }
 }

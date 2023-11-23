@@ -37,9 +37,15 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 
     #region [cache]
 
+#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cache' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private IDistributedCache _cache;
+#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cache' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
+#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cacheKey' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private string _cacheKey;
+#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cacheKey' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
+#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cacheEntryOptions' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private DistributedCacheEntryOptions _cacheEntryOptions;
+#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cacheEntryOptions' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
 
     #endregion [cache]
 
@@ -81,7 +87,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
         return this;
     }
 
-    public async Task ExecutedAsync(Action<TResult> onResult)
+    public async Task OnExecutedAsync(Action<TResult> onResult)
     {
         var sw = Stopwatch.StartNew();
         if (_useTransaction.xIsTrue())
@@ -105,9 +111,6 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
             await ExecuteCore(onResult);
         }
         sw.Stop();
-#if DEBUG
-        Log.Logger.Information("{ServiceName} execute time(sec):{Second}", _service.GetType().Name, sw.Elapsed.TotalSeconds);
-#endif
     }
 
     #region [execute core]
