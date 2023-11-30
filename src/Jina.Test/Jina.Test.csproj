@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\eXtensionSharp\src\eXtensionSharp.csproj" />
+    <ProjectReference Include="..\Jina.Sql\Jina.Sql.csproj" />
     <ProjectReference Include="..\Jina.Validate\Jina.Validate.csproj" />
     <ProjectReference Include="..\jina\Jina.csproj" />
   </ItemGroup>

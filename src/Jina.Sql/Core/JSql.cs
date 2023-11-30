@@ -9,8 +9,8 @@ public sealed class JSql
 {
     private readonly JSqlReader _jSqlReader;
     private readonly Options _jitOptions;
-    
-    public JSql(JSqlReader jSqlReader, CancellationToken cancellationToken = new ())
+
+    public JSql(JSqlReader jSqlReader, CancellationToken cancellationToken = new())
     {
         _jSqlReader = jSqlReader;
 
@@ -18,13 +18,13 @@ public sealed class JSql
         {
             // Limit memory allocations to MB
             _jitOptions.LimitMemory(4_000_000);
-            
+
             // Set a timeout to 4 seconds.
             // options.TimeoutInterval(TimeSpan.FromSeconds(4));
 
             // Set limit of 1000 executed statements.
             _jitOptions.MaxStatements(1000);
-            
+
             // Use a cancellation token.
             _jitOptions.CancellationToken(cancellationToken);
 
@@ -34,7 +34,7 @@ public sealed class JSql
             //options.DebugMode(true);
         }
     }
-    
+
     private string Sql(string name, object o)
     {
         var jsql = _jSqlReader.GetJSql(name);
@@ -74,7 +74,7 @@ public sealed class JSql
         , CommandType commandType = CommandType.Text)
     {
         var sql = this.Sql(name, o);
-        var result = await connection.QueryAsync<T>(sql, o, commandType:commandType);
+        var result = await connection.QueryAsync<T>(sql, o, commandType: commandType);
         return result;
     }
 
@@ -82,7 +82,7 @@ public sealed class JSql
         , CommandType commandType = CommandType.Text)
     {
         var sql = this.Sql(name, o);
-        var result = await connection.QueryFirstOrDefaultAsync<T>(sql, o, commandType:commandType);
+        var result = await connection.QueryFirstOrDefaultAsync<T>(sql, o, commandType: commandType);
 #pragma warning disable CS8603 // 가능한 null 참조 반환입니다.
         return result;
 #pragma warning restore CS8603 // 가능한 null 참조 반환입니다.
@@ -95,7 +95,7 @@ public sealed class JSql
         int result = 0;
         try
         {
-            result = await connection.ExecuteAsync(sql, o, commandType:commandType);
+            result = await connection.ExecuteAsync(sql, o, commandType: commandType);
         }
         catch (Exception e)
         {
@@ -109,13 +109,13 @@ public sealed class JSql
         , CommandType commandType = CommandType.Text)
     {
         var sql = this.PagingSql(name, o);
-        return await connection.QueryAsync<T>(sql, o, commandType:commandType);
+        return await connection.QueryAsync<T>(sql, o, commandType: commandType);
     }
-    
+
     public async Task<int> QueryCountAsync(IDbConnection connection, string name, object o
         , CommandType commandType = CommandType.Text)
     {
         var sql = this.CountSql(name, o);
-        return await connection.ExecuteScalarAsync<int>(sql, o, commandType:commandType);
+        return await connection.ExecuteScalarAsync<int>(sql, o, commandType: commandType);
     }
 }

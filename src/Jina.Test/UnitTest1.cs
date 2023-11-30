@@ -1,19 +1,14 @@
 using eXtensionSharp;
 using Jina.Base.Service;
-using Jina.Base.Service.Abstract;
-using Jina.Validate;
+using Jina.Test.Services;
 using Jina.Validate.RuleValidate;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Jina.Test.Services;
 
 namespace Jina.Test;
 
 public class Tests
 {
-#pragma warning disable NUnit1032
-    private ServiceProvider _serviceProvider;
-#pragma warning restore NUnit1032
+    private IServiceProvider _serviceProvider;
 
     public Tests()
     {
