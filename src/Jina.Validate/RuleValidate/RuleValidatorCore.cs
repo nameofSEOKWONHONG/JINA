@@ -4,14 +4,14 @@ using System.Reflection;
 
 namespace Jina.Validate.RuleValidate
 {
-    public class JRuleValidatorEngine
+    public class RuleValidatorCore
     {
-        private static Lazy<JRuleValidatorEngine> _instance = new Lazy<JRuleValidatorEngine>(() => new JRuleValidatorEngine());
-        public static JRuleValidatorEngine Engine => _instance.Value;
+        private static Lazy<RuleValidatorCore> _instance = new Lazy<RuleValidatorCore>(() => new RuleValidatorCore());
+        public static RuleValidatorCore Instance => _instance.Value;
 
         private readonly IEnumerable<IRuleValidator> _ruleValidators;
 
-        private JRuleValidatorEngine()
+        private RuleValidatorCore()
         {
             _ruleValidators = GetRules();
         }

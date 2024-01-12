@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Jina.Injection;
 
-public static class JScrutorScanExtensions
+public static class ScanExtensions
 {
     public static IServiceCollection AddJinaScan(this IServiceCollection services, string domainName,
         string extensionName = ".dll")

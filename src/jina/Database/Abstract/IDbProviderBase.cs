@@ -2,7 +2,7 @@
 
 namespace Jina.Database.Abstract;
 
-public interface IDbProvider
+public interface IDbProviderBase
 {
     Task<IDbConnection> GetDbConnectionAsync();
 }

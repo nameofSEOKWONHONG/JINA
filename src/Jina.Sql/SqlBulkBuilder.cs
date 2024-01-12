@@ -8,14 +8,14 @@ using Jina.Utils.Pooling;
 
 namespace Jina.Sql;
 
-public class JSqlBulkBuilder<T>
+public class SqlBulkBuilder<T>
     where T : class
 {
     private readonly IDbConnection _connection;
     
     private const int BATCH_SIZE = 500;
 
-    internal JSqlBulkBuilder(IDbConnection connection)
+    internal SqlBulkBuilder(IDbConnection connection)
     {
         _connection = connection;
     }
@@ -173,9 +173,9 @@ public class JSqlBulkBuilder<T>
 
 public static class SqlBulkBuilderExtensions
 {
-    public static JSqlBulkBuilder<T> CreateSqlBulkBuilder<T>(this IDbConnection db)
+    public static SqlBulkBuilder<T> CreateSqlBulkBuilder<T>(this IDbConnection db)
         where T : BulkBase
     {
-        return new JSqlBulkBuilder<T>(db);
+        return new SqlBulkBuilder<T>(db);
     }
 }

@@ -5,17 +5,17 @@ using Microsoft.Data.SqlClient;
 
 namespace Jina.Database;
 
-public class JMsSqlProviderBase : JSqlProviderBase
+public class MsSqlProviderBase : DbProviderBase
 {
     private SqlConnection _sqlConnection;
     private readonly string _connectionString;
-    protected JMsSqlProviderBase(string connectionString)
+    protected MsSqlProviderBase(string connectionString)
     {
         _sqlConnection = new SqlConnection(connectionString);
         _connectionString = connectionString;
     }
 
-    protected JMsSqlProviderBase(SqlConnection connection)
+    protected MsSqlProviderBase(SqlConnection connection)
     {
         _sqlConnection = connection;
         _connectionString = _sqlConnection.ConnectionString;

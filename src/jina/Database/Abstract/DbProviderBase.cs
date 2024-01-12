@@ -2,7 +2,7 @@ using System.Data;
 
 namespace Jina.Database.Abstract;
 
-public abstract class JSqlProviderBase : IDbProvider
+public abstract class DbProviderBase : IDbProviderBase
 {
     public abstract Task<IDbConnection> GetDbConnectionAsync();
 }

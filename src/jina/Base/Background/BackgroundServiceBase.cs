@@ -4,14 +4,14 @@ using Serilog;
 
 namespace Jina.Base.Background;
 
-public abstract class JBackgroundServiceBase<TSelf, TRequest> : BackgroundService
+public abstract class BackgroundServiceBase<TSelf, TRequest> : BackgroundService
 where TSelf : class
 {
     protected ILogger Logger = Log.Logger;
     
     private readonly int _parallelCount;
     private readonly int _interval;
-    protected JBackgroundServiceBase(int parallelCount, int interval = 1000)
+    protected BackgroundServiceBase(int parallelCount, int interval = 1000)
     {
         this._parallelCount = parallelCount;
         this._interval = interval;
