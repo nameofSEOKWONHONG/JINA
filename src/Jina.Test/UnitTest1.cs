@@ -54,7 +54,7 @@ public class Tests
     [Test]
     public void rule_validator_test()
     {
-        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
+        if (RuleValidatorCore.Instance.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
         {
             ValidateRule = ENUM_VALIDATE_RULE.NotEmpty,
             Key = "Name",
@@ -65,7 +65,7 @@ public class Tests
             TestContext.Out.WriteLine(messageA);
         }
 
-        if (JRuleValidatorEngine.Engine.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
+        if (RuleValidatorCore.Instance.TryValidate(new Validate.RuleValidate.Abstract.RuleValidateOption()
         {
             ValidateRule = ENUM_VALIDATE_RULE.GraterThen,
             Key = "Age",
