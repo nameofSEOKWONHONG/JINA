@@ -22,7 +22,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 
     private List<Func<bool>> _filters = new();
     private Func<TRequest> _parameter;
-    private JValidator<TRequest> _validator;
+    private RuleValidator<TRequest> _validator;
     private Action<ValidationResult> _validateBehavior;
 
     #endregion [action behavior's]
@@ -75,7 +75,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
         return this;
     }
 
-    public IValidation<TRequest, TResult> SetValidator(JValidator<TRequest> validator)
+    public IValidation<TRequest, TResult> SetValidator(RuleValidator<TRequest> validator)
     {
         _validator = validator;
         return this;
