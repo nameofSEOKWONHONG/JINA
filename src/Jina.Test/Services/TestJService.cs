@@ -41,7 +41,7 @@ public class Request
     public string Name { get; set; }
 }
 
-public class RequestValidator : JValidator<Request>
+public class RequestValidator : Validator<Request>
 {
     public RequestValidator()
     {

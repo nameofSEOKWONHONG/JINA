@@ -14,7 +14,7 @@ public static class JSqlExtensions
             .AddSingleton<JSqlTimer>()
             .AddScoped<JSql>();
 
-        services.Configure<SqlOption>(configuration.GetSection(nameof(SqlOption)));
+        services.Configure<JSqlOption>(configuration.GetSection(nameof(JSqlOption)));
         
         return services;
     }
