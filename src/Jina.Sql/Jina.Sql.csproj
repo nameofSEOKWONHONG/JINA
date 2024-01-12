@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\eXtensionSharp\src\eXtensionSharp.csproj" />
       <ProjectReference Include="..\jina\Jina.csproj" />
     </ItemGroup>
 

@@ -9,8 +9,4 @@
     <ItemGroup>      <PackageReference Include="Ardalis.SmartEnum" Version="7.0.0" />      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\eXtensionSharp\src\eXtensionSharp.csproj" />
-    </ItemGroup>
-
 </Project>
