@@ -8,7 +8,7 @@ namespace Jina.Sql.Core;
 
 public static class JSqlExtensions
 {
-    public static IServiceCollection AddJinaJSql(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddJSql(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<JSqlReader>()
             .AddSingleton<JSqlTimer>()
@@ -19,7 +19,7 @@ public static class JSqlExtensions
         return services;
     }
 
-    public static IHost UseJinaJSql(this IHost host)
+    public static IHost UseJSql(this IHost host)
     {
         var engine = host.Services.GetService<JSqlReader>();
 #pragma warning disable CS8602 // null 가능 참조에 대한 역참조입니다.

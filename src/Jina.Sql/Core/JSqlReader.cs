@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using eXtensionSharp;
 using JSqlEngine.Data;
 using Microsoft.Extensions.Options;
 
@@ -30,17 +31,28 @@ public class JSqlReader
         var jsqlFileInfos = ReadFile(jsqlFiles);
         Parallel.ForEach(jsqlFileInfos, info =>
         {
-            _jsqlFileInfos.AddOrUpdate(info.FileName, info, (key, oldValue) => info);
+            _jsqlFileInfos.TryAdd(info.FileName, info);
         });
     }
 
-    public void SequentialRead()
+    public void Read()
     {
         var jsqlFiles = Directory.GetFiles(_rootPath, "*.jsql", SearchOption.AllDirectories);
         var jsqlFileInfos = ReadFile(jsqlFiles);
         foreach (var info in jsqlFileInfos)
         {
-            _jsqlFileInfos.AddOrUpdate(info.FileName, info, (key, oldValue) => info);
+            var exist = _jsqlFileInfos.FirstOrDefault(m => m.Key == info.FileName);
+            if (exist.xIsNotEmpty())
+            {
+                if (exist.Value.FileDateNum > info.FileDateNum)
+                {
+                    _jsqlFileInfos.AddOrUpdate(info.FileName, info, (key, oldValue) => info);               
+                }
+            }
+            else
+            {
+                _jsqlFileInfos.AddOrUpdate(info.FileName, info, (key, oldValue) => info);
+            }
         }
     }
 
@@ -57,6 +69,7 @@ public class JSqlReader
             {
                 FileName = Path.GetFileNameWithoutExtension(fileInfo.Name),
                 FileDate = date.ToString("yyyy-MM-dd HH:mm:ss"),
+                FileDateNum = date.ToString("yyyyMMddHHmmss").xValue<int>(),
                 Sql = sql
             });
         }
