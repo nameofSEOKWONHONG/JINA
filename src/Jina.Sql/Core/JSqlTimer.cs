@@ -1,21 +1,18 @@
-﻿namespace JSqlEngine.Core;
+﻿using eXtensionSharp;
+
+namespace JSqlEngine.Core;
 
 /// <summary>
 /// 싱글톤으로 동작해야 함.
 /// </summary>
-internal class JSqlTimer : IDisposable
+internal class JSqlTimer(JSqlReader jSqlReader) : IDisposable
 {
-    private readonly JSqlReader _jSqlReader;
+    private readonly JSqlReader _jSqlReader = jSqlReader;
     private Timer _timer;
     private bool _isWorking = false;
     private static object _sync = new object();
 
     public string this[string name] => _jSqlReader.GetJSql(name);
-    
-    public JSqlTimer(JSqlReader jSqlReader)
-    {
-        _jSqlReader = jSqlReader;
-    }
 
     public void Initialize()
     {
@@ -37,6 +34,9 @@ internal class JSqlTimer : IDisposable
 
     public void Dispose()
     {
-        _timer.Dispose();
+        if(_timer.xIsNotEmpty())
+        {
+            _timer.Dispose();
+        }
     }
 }

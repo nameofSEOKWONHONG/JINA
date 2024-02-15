@@ -7,26 +7,26 @@ namespace Jina.Sql.Core;
 
 public sealed class JSql
 {
-    private readonly JSqlReader _jSqlReader;
-    private readonly Options _jitOptions;
+    private readonly JSqlReader _reader;
+    private readonly Options _options;
 
     public JSql(JSqlReader jSqlReader, CancellationToken cancellationToken = new())
     {
-        _jSqlReader = jSqlReader;
+        _reader = jSqlReader;
 
-        _jitOptions = new Options();
+        _options = new Options();
         {
             // Limit memory allocations to MB
-            _jitOptions.LimitMemory(4_000_000);
+            _options.LimitMemory(4_000_000);
 
             // Set a timeout to 4 seconds.
             // options.TimeoutInterval(TimeSpan.FromSeconds(4));
 
             // Set limit of 1000 executed statements.
-            _jitOptions.MaxStatements(1000);
+            _options.MaxStatements(1000);
 
             // Use a cancellation token.
-            _jitOptions.CancellationToken(cancellationToken);
+            _options.CancellationToken(cancellationToken);
 
             // 필요하면 주석 해제.
             //var path = Directory.GetCurrentDirectory();
@@ -37,8 +37,8 @@ public sealed class JSql
 
     private string Sql(string name, object o)
     {
-        var jsql = _jSqlReader.GetJSql(name);
-        var v = new Engine(_jitOptions)
+        var jsql = _reader.GetJSql(name);
+        var v = new Engine(_options)
             .Execute(JSqlTemplate.JSQL_TEMPLATE
                 .Replace(JSqlTemplate.SQL_CODE, jsql))
             .Invoke("jsql", o);
@@ -48,10 +48,10 @@ public sealed class JSql
 
     private string CountSql(string name, object o)
     {
-        var jsql = _jSqlReader.GetJSql(name);
+        var jsql = _reader.GetJSql(name);
         var c = JSqlTemplate.JSQL_COUNT_TEMPLATE
             .Replace(JSqlTemplate.SQL_CODE, jsql);
-        var v = new Engine(_jitOptions)
+        var v = new Engine(_options)
             .Execute(c)
             .Invoke("jsql", o);
 
@@ -60,10 +60,10 @@ public sealed class JSql
 
     private string PagingSql(string name, object o)
     {
-        var jsql = _jSqlReader.GetJSql(name);
+        var jsql = _reader.GetJSql(name);
         var c = JSqlTemplate.JSQL_PAING_TEMPLATE
             .Replace(JSqlTemplate.SQL_CODE, jsql);
-        var v = new Engine(_jitOptions)
+        var v = new Engine(_options)
             .Execute(c)
             .Invoke("jsql", o);
 
