@@ -12,13 +12,13 @@ namespace Jina.Base.Service;
 //     }
 // }
 
-public class ServiceInvoker<TRequest, TResult>
+public class ServicePipeline<TRequest, TResult>
 {
-    private ServiceInvoker()
+    private ServicePipeline()
     {
     }
 
-    public static ServiceLoader<TRequest, TResult> Invoke(IServiceImplBase<TRequest, TResult> service)
+    public static ServiceLoader<TRequest, TResult> Create(IServiceImplBase<TRequest, TResult> service)
     {
         return new ServiceLoader<TRequest, TResult>(service);
     }

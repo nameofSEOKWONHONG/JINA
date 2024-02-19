@@ -1,40 +1,43 @@
 using eXtensionSharp;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Jina.Base.Background;
 
 public abstract class BackgroundServiceBase<TSelf, TRequest> : BackgroundService
 where TSelf : class
 {
-    protected ILogger Logger = Log.Logger;
-    
+    protected ILogger<TSelf> Logger { get; set; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; set; }
     private readonly int _parallelCount;
     private readonly int _interval;
-    protected BackgroundServiceBase(int parallelCount, int interval = 1000)
+
+    protected BackgroundServiceBase(ILogger<TSelf> logger, IServiceScopeFactory serviceScopeFactory, int parallelCount, int interval = 1000)
     {
+        Logger = logger;
         this._parallelCount = parallelCount;
         this._interval = interval;
+        this.ServiceScopeFactory = serviceScopeFactory;
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        Logger.Information("{ServiceName} Start", typeof(TSelf).Name);
+        Logger.LogInformation("{ServiceName} Start", typeof(TSelf).Name);
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            var items = await OnProducerAsync(stoppingToken);
-        
-            Logger.Information("Retrieve item number: {Num}", items.xCount());
+            var items = await OnProducerAsync(stoppingToken);        
+            Logger.LogInformation("Retrieve item count: {Num}", items.xCount());
+
+            if (items.xCount() <= 0)
+            {
+                await Task.Delay(_interval, stoppingToken);
+                continue;
+            }
 
             try
             {
-                if (items.xCount() <= 0)
-                {
-                    await Task.Delay(_interval, stoppingToken);
-                    return;
-                }
-
                 await Parallel.ForEachAsync(items, new ParallelOptions()
                 {
                     // ReSharper disable once HeapView.BoxingAllocation
@@ -49,16 +52,16 @@ where TSelf : class
             }
             catch (TaskCanceledException taskCanceledException)
             {
-                Logger.Error(taskCanceledException, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(taskCanceledException, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
                     taskCanceledException.Message);
             }
             catch (Exception e)
             {
-                Logger.Error(e, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(e, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
                     e.Message);
             }
 
-            Logger.Information("{ServiceName} End", typeof(TSelf).Name);
+            Logger.LogInformation("{ServiceName} End", typeof(TSelf).Name);
 
             await Task.Delay(_interval, stoppingToken);
         }

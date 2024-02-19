@@ -2,7 +2,7 @@
 
 public interface IAddFilter<TRequest, TResult>
 {
-    IAddFilter<TRequest, TResult> AddFilter(Func<bool> onFilter);
+    IAddFilter<TRequest, TResult> AddFilter(Func<bool> filter);
 
-    ISetParameter<TRequest, TResult> SetParameter(Func<TRequest> onParameter);
+    ISetParameter<TRequest, TResult> SetParameter(Func<TRequest> parameter);
 }

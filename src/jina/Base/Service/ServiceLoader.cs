@@ -81,7 +81,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
         return this;
     }
 
-    public IExecutor<TRequest, TResult> OnValidated(Action<ValidationResult> validateBehavior)
+    public IExecutor<TRequest, TResult> OnError(Action<ValidationResult> validateBehavior)
     {
         _validateBehavior = validateBehavior;
         return this;

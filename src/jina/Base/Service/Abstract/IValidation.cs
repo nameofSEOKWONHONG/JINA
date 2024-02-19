@@ -4,5 +4,5 @@ namespace Jina.Base.Service.Abstract;
 
 public interface IValidation<TRequest, TResult>
 {
-    IExecutor<TRequest, TResult> OnValidated(Action<ValidationResult> validateBehavior);
+    IExecutor<TRequest, TResult> OnError(Action<ValidationResult> validator);
 }

@@ -6,5 +6,5 @@ public interface IUseTransaction<TRequest, TResult>
 {
     IValidation<TRequest, TResult> SetValidator(Validator<TRequest> validator);
 
-    Task OnExecutedAsync(Action<TResult> onResult);
+    Task OnExecutedAsync(Action<TResult> result);
 }
