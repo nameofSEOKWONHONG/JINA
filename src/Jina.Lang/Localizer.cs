@@ -7,10 +7,10 @@ public class Localizer : ILocalizer
 {
     private readonly string[] _supportLanguage = new[]
     {
-        ENUM_LOCALIZE_TYPE.EN_US.ToString(), 
-        ENUM_LOCALIZE_TYPE.KO_KR.ToString(),
-        ENUM_LOCALIZE_TYPE.ZH_CN.ToString(),
-        ENUM_LOCALIZE_TYPE.JA_JP.ToString()
+        ENUM_LOCALIZE_TYPE.EN_US.Name, 
+        ENUM_LOCALIZE_TYPE.KO_KR.Name,
+        ENUM_LOCALIZE_TYPE.ZH_CN.Name,
+        ENUM_LOCALIZE_TYPE.JA_JP.Name
     };
     
     public string this[string resCode]
