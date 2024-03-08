@@ -1,29 +1,29 @@
 # JINA
-**J** **I**nfrastructure for .**N**et **A**pplication
+**Just Do it**, **I**nfrastructure for .**N**et **A**pplication
 
-## JINA¶õ?
-* JINA´Â ASP.NET CORE+ ¿¡ Àû¿ëµÇ´Â °øÅë ¶óÀÌºê·¯¸® ¹× Ãß»óÈ­ °èÃþÀÇ ¼­¹öÃø ±¸ÇöÀÔ´Ï´Ù.
-* JINA´Â ±âº»ÀûÀ¸·Î CQRS¿¡ ´ëÇÑ µ¶ÀÚÀû ±¸ÇöÀ» Æ÷ÇÔÇÕ´Ï´Ù.
-* JINA´Â CQRS ±¸Çö¿¡ ÇÊ¿äÇÑ CACHE, ´Ù±¹¾î, Validation, Context ÆÐÅÏ¿¡ ´ëÇÑ ±¸ÇöÀÌ Æ÷ÇÔµË´Ï´Ù.
+## JINAëž€?
+* JINAëŠ” ASP.NET CORE+ ì— ì ìš©ë˜ëŠ” ê³µí†µ ë¼ì´ë¸ŒëŸ¬ë¦¬ ë° ì¶”ìƒí™” ê³„ì¸µì˜ ì„œë²„ì¸¡ êµ¬í˜„ìž…ë‹ˆë‹¤.
+* JINAëŠ” ê¸°ë³¸ì ìœ¼ë¡œ CQRSì— ëŒ€í•œ ë…ìžì  êµ¬í˜„ì„ í¬í•¨í•©ë‹ˆë‹¤.
+* JINAëŠ” CQRS êµ¬í˜„ì— í•„ìš”í•œ CACHE, ë‹¤êµ­ì–´, Validation, Context íŒ¨í„´ì— ëŒ€í•œ êµ¬í˜„ì´ í¬í•¨ë©ë‹ˆë‹¤.
 
-## »ó¼¼
+## ìƒì„¸
 * Jina.Excel
-    * Excel¿¡ ´ëÇÑ ±¸ÇöÀÔ´Ï´Ù. ClosedXmlÀ» »ç¿ëÇÕ´Ï´Ù.
+    * Excelì— ëŒ€í•œ êµ¬í˜„ìž…ë‹ˆë‹¤. ClosedXmlì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 * Jina.Lang
-    * Áö¿ªÈ­ ¾ð¾î¿¡ ´ëÇÑ ±¸ÇöÀÔ´Ï´Ù. JsonÀ» ±âÃÊ·Î ÇÕ´Ï´Ù.
+    * ì§€ì—­í™” ì–¸ì–´ì— ëŒ€í•œ êµ¬í˜„ìž…ë‹ˆë‹¤. Jsonì„ ê¸°ì´ˆë¡œ í•©ë‹ˆë‹¤.
 * Jina.Sql
-    * Jint¸¦ ÀÌ¿ëÇÑ Sql Plain Text QueryÀÇ µ¿Àû ±¸ÇöÀÔ´Ï´Ù.
-    * BulkInsert¸¦ Æ÷ÇÔÇÕ´Ï´Ù.
+    * Jintë¥¼ ì´ìš©í•œ Sql Plain Text Queryì˜ ë™ì  êµ¬í˜„ìž…ë‹ˆë‹¤.
+    * BulkInsertë¥¼ í¬í•¨í•©ë‹ˆë‹¤.
 * Jina.Validate
-    * FluentValidationÀÇ È®ÀåÀÔ´Ï´Ù.
-    * ValidationÀº Jina.Lang°ú °áÇÕµÇ¾î ´Ù±¹¾î¸¦ Áö¿øÇÕ´Ï´Ù.
-* Jina.SequenceGenerator ``` ¾ðÁ¦µç Á¦°Å µÉ ¼ö ÀÖ½À´Ï´Ù. ```
-    * EF¸¦ ÀÌ¿ëÇÑ ¼öµ¿ Ã¤¹ø¿¡ ´ëÇÑ ±¸ÇöÀÔ´Ï´Ù.
+    * FluentValidationì˜ í™•ìž¥ìž…ë‹ˆë‹¤.
+    * Validationì€ Jina.Langê³¼ ê²°í•©ë˜ì–´ ë‹¤êµ­ì–´ë¥¼ ì§€ì›í•©ë‹ˆë‹¤.
+* Jina.SequenceGenerator ``` ì–¸ì œë“  ì œê±° ë  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ```
+    * EFë¥¼ ì´ìš©í•œ ìˆ˜ë™ ì±„ë²ˆì— ëŒ€í•œ êµ¬í˜„ìž…ë‹ˆë‹¤.
 
-## ÁÖÀÇ
-* Jina.Lang, Jina.Validate´Â Blazor SPA Client¸¦ °í·ÁÇÏ¿© Jina¿¡ ´ëÇÑ ÀÇÁ¸¼ºÀÌ ¾ø½À´Ï´Ù.
-* Jina´Â Jina.Lang, Jina.ValidateÀÇ ÀÇÁ¸¼ºÀÌ Æ÷ÇÔµË´Ï´Ù.
-* °øÅëÈ­ ½Ã³ª¸®¿À(Session, Context)¿¡ µû¶ó Excel, SqlÀº JinaÀÇ ÀÇÁ¸¼ºÀÌ Æ÷ÇÔµË´Ï´Ù.
+## ì£¼ì˜
+* Jina.Lang, Jina.ValidateëŠ” Blazor SPA Clientë¥¼ ê³ ë ¤í•˜ì—¬ Jinaì— ëŒ€í•œ ì˜ì¡´ì„±ì´ ì—†ìŠµë‹ˆë‹¤.
+* JinaëŠ” Jina.Lang, Jina.Validateì˜ ì˜ì¡´ì„±ì´ í¬í•¨ë©ë‹ˆë‹¤.
+* ê³µí†µí™” ì‹œë‚˜ë¦¬ì˜¤(Session, Context)ì— ë”°ë¼ Excel, Sqlì€ Jinaì˜ ì˜ì¡´ì„±ì´ í¬í•¨ë©ë‹ˆë‹¤.
 
 ## Thank you to
 
