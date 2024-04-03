@@ -1,11 +1,9 @@
 ﻿using eXtensionSharp;
-using Jina.Lang;
-using Jina.Lang.Abstract;
 using Jina.Validate.RuleValidate.Abstract;
 
 namespace Jina.Validate.RuleValidate.Impl
 {
-    public class GreaterThenRule : RuleValidatorBase, IRuleValidator
+	public class GreaterThenRule : RuleValidatorBase, IRuleValidator
     {
         public ENUM_VALIDATE_RULE ValidateRule => ENUM_VALIDATE_RULE.GraterThen;
 

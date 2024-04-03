@@ -13,11 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Validate", "src\Jina.V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Test", "src\Jina.Test\Jina.Test.csproj", "{48F042DC-FA31-4978-822A-93E0EE49D87D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eXtensionSharp", "..\eXtensionSharp\src\eXtensionSharp.csproj", "{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.SequenceGenerator", "src\Jina.SequenceGenerator\Jina.SequenceGenerator.csproj", "{D86B6E8A-A103-4930-A3CE-BE965C62861B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jina.Excel", "src\Jina.Excel\Jina.Excel.csproj", "{A3DA1EC9-7D36-477C-AF1D-9043930D6200}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jina.Excel", "src\Jina.Excel\Jina.Excel.csproj", "{A3DA1EC9-7D36-477C-AF1D-9043930D6200}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +43,6 @@ Global
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48F042DC-FA31-4978-822A-93E0EE49D87D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0327DB7-64EB-448F-8817-9FFC0D1C37C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D86B6E8A-A103-4930-A3CE-BE965C62861B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D86B6E8A-A103-4930-A3CE-BE965C62861B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D86B6E8A-A103-4930-A3CE-BE965C62861B}.Release|Any CPU.ActiveCfg = Release|Any CPU

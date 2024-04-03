@@ -1,10 +1,9 @@
 ﻿using eXtensionSharp;
-using Jina.Lang.Abstract;
 using Jina.Validate.RuleValidate.Abstract;
 
 namespace Jina.Validate.RuleValidate.Impl
 {
-    public class NotEmptyRule : RuleValidatorBase, IRuleValidator
+	public class NotEmptyRule : RuleValidatorBase, IRuleValidator
     {
         public ENUM_VALIDATE_RULE ValidateRule => ENUM_VALIDATE_RULE.NotEmpty;
 

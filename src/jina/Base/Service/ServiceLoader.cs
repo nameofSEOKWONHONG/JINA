@@ -2,10 +2,12 @@ using System.Diagnostics;
 using System.Transactions;
 using eXtensionSharp;
 using FluentValidation.Results;
+using Jina.Base.Attributes;
 using Jina.Base.Service.Abstract;
 using Jina.Validate;
 using Microsoft.Extensions.Caching.Distributed;
 using Serilog;
+using ServiceStack;
 
 namespace Jina.Base.Service;
 
@@ -27,25 +29,11 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 
     #endregion [action behavior's]
 
-    #region [database transaction]
-
-    private bool _useTransaction;
-    private System.Transactions.IsolationLevel _isolationLevel;
-    private TransactionScopeOption _transactionScopeOption;
-
-    #endregion [database transaction]
-
     #region [cache]
 
-#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cache' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private IDistributedCache _cache;
-#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cache' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
-#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cacheKey' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private string _cacheKey;
-#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cacheKey' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
-#pragma warning disable CS0649 // 'ServiceLoader<TRequest, TResult>._cacheEntryOptions' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
     private DistributedCacheEntryOptions _cacheEntryOptions;
-#pragma warning restore CS0649 // 'ServiceLoader<TRequest, TResult>._cacheEntryOptions' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다.
 
     #endregion [cache]
 
@@ -66,15 +54,6 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
         return this;
     }
 
-    public IUseTransaction<TRequest, TResult> UseTransaction(TransactionScopeOption option = TransactionScopeOption.Required,
-        IsolationLevel isolationLevel = IsolationLevel.ReadUncommitted)
-    {
-        _useTransaction = true;
-        _transactionScopeOption = option;
-        _isolationLevel = isolationLevel;
-        return this;
-    }
-
     public IValidation<TRequest, TResult> SetValidator(Validator<TRequest> validator)
     {
         _validator = validator;
@@ -90,27 +69,37 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
     public async Task OnExecutedAsync(Action<TResult> onResult)
     {
         var sw = Stopwatch.StartNew();
-        if (_useTransaction.xIsTrue())
+
+        var type = _service.GetType();
+		var attribute = (TransactionOptionsAttribute)Attribute.GetCustomAttribute(type, typeof(TransactionOptionsAttribute));
+        if(attribute.xIsEmpty())
         {
-            using var scope = new TransactionScope(_transactionScopeOption,
-                new TransactionOptions() { IsolationLevel = _isolationLevel },
-                TransactionScopeAsyncFlowOption.Enabled);
-            try
-            {
-                await ExecuteCore(onResult);
-                scope.Complete();
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error(e, "ServiceLoader OnExecuted Error : {Error}", e.Message);
-                throw;
-            }
+            attribute = new TransactionOptionsAttribute( TransactionScopeOption.Required, IsolationLevel.ReadUncommitted, 5);
         }
-        else
+
+        using (var scope = new TransactionScope(
+            attribute.ScopeOption,
+            new TransactionOptions()
+            {
+                IsolationLevel = attribute.IsolationLevel,
+                Timeout = attribute.Timeout
+            },
+            TransactionScopeAsyncFlowOption.Enabled))
         {
-            await ExecuteCore(onResult);
-        }
-        sw.Stop();
+			try
+			{
+				await ExecuteCore(onResult);
+				scope.Complete();
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error(e, "ServiceLoader OnExecuted Error : {Error}", e.Message);
+				throw;
+			}
+		}
+		
+		sw.Stop();
+        Log.Logger.Information("execute service time : {time}", sw.Elapsed.TotalSeconds);
     }
 
     #region [execute core]

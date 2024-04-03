@@ -11,16 +11,17 @@ public class LocalizeLoader
         new Lazy<LocalizeLoader>(() => new LocalizeLoader());
 
     private const string LANG_PATH_NAME = "language";
-    private readonly string LANG_PATH = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LANG_PATH_NAME);
+    private readonly string LANG_PATH = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LANG_PATH_NAME);    
+
     public Dictionary<string, Dictionary<string, string>> Loader { get; private set; } = new();
     public static object _sync = new();
     
     private LocalizeLoader()
     {
-        ReadLanguageFile();
+        Init();
     }
 
-    private void ReadLanguageFile()
+    private void Init()
     {
         var newLoader = new Dictionary<string, Dictionary<string, string>>();
         var files = Directory.GetFiles(LANG_PATH);

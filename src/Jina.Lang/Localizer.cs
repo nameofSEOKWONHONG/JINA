@@ -3,6 +3,9 @@ using Jina.Lang.Abstract;
 
 namespace Jina.Lang;
 
+/// <summary>
+/// server side localizer
+/// </summary>
 public class Localizer : ILocalizer
 {
     private readonly string[] _supportLanguage = new[]

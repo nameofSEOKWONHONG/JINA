@@ -5,6 +5,7 @@ using Dapper;
 using eXtensionSharp;
 using Jina.Base.Data;
 using Jina.Utils.Pooling;
+using Microsoft.Data.SqlClient;
 
 namespace Jina.Sql;
 
@@ -20,6 +21,13 @@ public class SqlBulkBuilder<T>
         _connection = connection;
     }
 
+    /// <summary>
+    /// 수동 지정 쿼리 생성 bulk insert
+    /// </summary>
+    /// <param name="schema"></param>
+    /// <param name="tableName"></param>
+    /// <param name="items"></param>
+    /// <returns></returns>
     public async Task BulkInsertAsync(string schema, string tableName, T[] items)
     {
         if (items.xIsEmpty()) return;
@@ -27,21 +35,43 @@ public class SqlBulkBuilder<T>
         for (var i = 0; i < items.Length; i++)
         {
             var item = items[i];
-        }
-        
-        var batchItems = items.xBatch(BATCH_SIZE);
+        }        
+
+		var batchItems = items.xBatch(BATCH_SIZE);
         foreach (T[] batchItem in batchItems)
         {
-            var sql = CreateSql(schema, tableName, batchItem);
+			var sql = CreateSql(schema, tableName, batchItem);
             await _connection.ExecuteAsync(sql);
         }
     }
 
+    /// <summary>
+    /// 제너릭을 이용한 bulk insert
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="items"></param>
+    /// <returns></returns>
     public Task BulkInsertAsync<TEntity>(T[] items)
     {
         var tableinfo = AssignSchemaAndTable();
         return this.BulkInsertAsync(tableinfo.schemaName, tableinfo.tableName, items);
-    }
+    }    
+
+    /// <summary>
+    /// datatable을 이용한 bulk insert
+    /// </summary>
+    /// <param name="bulkCopySetter"></param>
+    /// <param name="datatableSetter"></param>
+    /// <returns></returns>
+    public async Task BulkCopyAsync(Action<SqlBulkCopy> bulkCopySetter, Func<DataTable> datatableSetter)
+    {
+		using var bulkCopy = new SqlBulkCopy((SqlConnection)_connection);
+        bulkCopySetter(bulkCopy);
+
+        var dataTable = datatableSetter();
+
+		await bulkCopy.WriteToServerAsync(dataTable);
+	}
     
     private string CreateSql(string schema, string tableName, T[] items)
     {
