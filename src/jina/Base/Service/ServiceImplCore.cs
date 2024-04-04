@@ -3,31 +3,31 @@ using Jina.Database.Abstract;
 
 namespace Jina.Base.Service;
 
-public abstract class ServiceImplBase<TSelf>
+public abstract class ServiceImplCore<TSelf>
 {
     protected IDbProviderBase DbProviderBase;
     protected IHttpClientFactory HttpClientFactory;
 
     protected Serilog.ILogger Logger => Serilog.Log.Logger;
 
-    protected ServiceImplBase()
+    protected ServiceImplCore()
     {
         this.Logger.Debug("Create Instance : {Instance}", typeof(TSelf).Name);
     }
 
-    protected ServiceImplBase(IDbProviderBase db)
+    protected ServiceImplCore(IDbProviderBase db)
     {
         this.DbProviderBase = db;
         this.Logger.Debug("Create Instance With IDbProvider : {Instance}", typeof(TSelf).Name);
     }
 
-    protected ServiceImplBase(IHttpClientFactory httpClientFactory)
+    protected ServiceImplCore(IHttpClientFactory httpClientFactory)
     {
         this.HttpClientFactory = httpClientFactory;
         this.Logger.Debug("Create Instance With IDbProvider : {Instance}", typeof(TSelf).Name);
     }
 
-    protected ServiceImplBase(IDbProviderBase db, IHttpClientFactory httpClientFactory)
+    protected ServiceImplCore(IDbProviderBase db, IHttpClientFactory httpClientFactory)
     {
         this.DbProviderBase = db;
         this.HttpClientFactory = httpClientFactory;
@@ -35,23 +35,23 @@ public abstract class ServiceImplBase<TSelf>
     }
 }
 
-public abstract class ServiceImplBase<TSelf, TRequest, TResult>
-    : ServiceImplBase<TSelf>
+public abstract class ServiceImplCore<TSelf, TRequest, TResult>
+    : ServiceImplCore<TSelf>
         , IServiceImplBase<TRequest, TResult>
 {
-    protected ServiceImplBase() : base()
+    protected ServiceImplCore() : base()
     {
     }
 
-    protected ServiceImplBase(IDbProviderBase db) : base(db)
+    protected ServiceImplCore(IDbProviderBase db) : base(db)
     {
     }
 
-    protected ServiceImplBase(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    protected ServiceImplCore(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
     {
     }
 
-    protected ServiceImplBase(IDbProviderBase db, IHttpClientFactory httpClientFactory)
+    protected ServiceImplCore(IDbProviderBase db, IHttpClientFactory httpClientFactory)
         : base(db, httpClientFactory)
     {
     }

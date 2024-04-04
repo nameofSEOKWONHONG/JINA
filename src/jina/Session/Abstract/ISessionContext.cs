@@ -1,4 +1,6 @@
-﻿namespace Jina.Session.Abstract;
+﻿using Jina.Lang.Abstract;
+
+namespace Jina.Session.Abstract;
 
 public interface ISessionContext
 {
@@ -13,6 +15,8 @@ public interface ISessionContext
     /// UTC 타임 정보
     /// </summary>
     ISessionDateTime CurrentTime { get; }
+
+    ILocalizer Localizer { get; }
 
     bool IsDecrypt { get; }
 }
