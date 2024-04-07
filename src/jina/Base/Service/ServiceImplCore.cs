@@ -56,7 +56,7 @@ public abstract class ServiceImplCore<TSelf, TRequest, TResult>
     {
     }
 
-    public abstract Task<bool> OnExecutingAsync();
+    public abstract Task OnExecutingAsync();
 
     public abstract Task OnExecuteAsync();
 

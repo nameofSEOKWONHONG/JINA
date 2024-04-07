@@ -1,9 +1,12 @@
-﻿using Jina.Lang.Abstract;
+﻿using eXtensionSharp;
+using Jina.Lang.Abstract;
 
 namespace Jina.Session.Abstract;
 
 public interface ISessionContext
 {
+    bool IsUnknown { get { return TenantId.xIsEmpty(); } }
+
     string TenantId { get; }
 
     /// <summary>

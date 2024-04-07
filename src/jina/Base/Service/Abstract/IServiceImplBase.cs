@@ -2,7 +2,7 @@
 
 public interface IServiceImplBase
 {
-    Task<bool> OnExecutingAsync();
+    Task OnExecutingAsync();
     Task OnExecuteAsync();
 }
 

@@ -74,10 +74,10 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 		var attribute = (TransactionOptionsAttribute)Attribute.GetCustomAttribute(type, typeof(TransactionOptionsAttribute));
         if(attribute.xIsEmpty())
         {
-            attribute = new TransactionOptionsAttribute( TransactionScopeOption.Required, IsolationLevel.ReadUncommitted, 5);
-        }
+            attribute = new TransactionOptionsAttribute( TransactionScopeOption.Required, IsolationLevel.ReadUncommitted);
+		}
 
-        using (var scope = new TransactionScope(
+		using (var scope = new TransactionScope(
             attribute.ScopeOption,
             new TransactionOptions()
             {
@@ -177,11 +177,11 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 
     private async Task ExecuteAsync(Action<TResult> resultBehavior)
     {
-        var isOk = await _service.OnExecutingAsync();
-        if (isOk)
+        await _service.OnExecutingAsync();
+        if(_service.Result.xIsEmpty())
         {
-            await _service.OnExecuteAsync();
-        }
+			await _service.OnExecuteAsync();
+		}
         if (resultBehavior.xIsNotEmpty())
         {
             resultBehavior(_service.Result);

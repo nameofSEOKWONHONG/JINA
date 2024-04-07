@@ -9,7 +9,7 @@ namespace Jina.Base.Attributes
 		public IsolationLevel IsolationLevel { get; }
 		public TimeSpan Timeout { get; }
 
-		public TransactionOptionsAttribute(TransactionScopeOption scopeOption, IsolationLevel isolationLevel = IsolationLevel.ReadUncommitted, int timeoutSeconds = 5)
+		public TransactionOptionsAttribute(TransactionScopeOption scopeOption, IsolationLevel isolationLevel = IsolationLevel.ReadUncommitted, int timeoutSeconds = int.MaxValue)
 		{
 			ScopeOption = scopeOption;
 			IsolationLevel = isolationLevel;
