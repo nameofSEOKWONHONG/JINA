@@ -8,6 +8,7 @@ public interface IServiceImplBase
 
 public interface IServiceImplBase<TRequest, TResult> : IServiceImplBase
 {
+    IServiceImplBase<TRequest, TResult> Self { get; }
     TRequest Request { get; set; }
     TResult Result { get; set; }
 }

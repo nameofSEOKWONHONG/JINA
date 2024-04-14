@@ -7,11 +7,16 @@ using Jina.Base.Service.Abstract;
 using Jina.Validate;
 using Microsoft.Extensions.Caching.Distributed;
 using Serilog;
-using ServiceStack;
 
 namespace Jina.Base.Service;
 
-public class ServiceLoader<TRequest, TResult> : DisposeBase
+public abstract class ServiceLoaderBase : DisposeBase
+{
+    public IServiceImplBase Self { get; init; }
+    public abstract Task ExecuteCore();
+}
+
+public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
     , IAddFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>
     , IUseTransaction<TRequest, TResult>
@@ -26,6 +31,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
     private Func<TRequest> _parameter;
     private Validator<TRequest> _validator;
     private Action<ValidationResult> _validateBehavior;
+    private Action<TResult> _onResult;
 
     #endregion [action behavior's]
 
@@ -40,6 +46,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
     internal ServiceLoader(IServiceImplBase<TRequest, TResult> service)
     {
         _service = service;
+        this.Self = _service;
     }
 
     public IAddFilter<TRequest, TResult> AddFilter(Func<bool> onFilter)
@@ -66,45 +73,14 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
         return this;
     }
 
-    public async Task OnExecutedAsync(Action<TResult> onResult)
+    public void OnExecuted(Action<TResult> onResult)
     {
-        var sw = Stopwatch.StartNew();
-
-        var type = _service.GetType();
-		var attribute = (TransactionOptionsAttribute)Attribute.GetCustomAttribute(type, typeof(TransactionOptionsAttribute));
-        if(attribute.xIsEmpty())
-        {
-            attribute = new TransactionOptionsAttribute( TransactionScopeOption.Required, IsolationLevel.ReadUncommitted);
-		}
-
-		using (var scope = new TransactionScope(
-            attribute.ScopeOption,
-            new TransactionOptions()
-            {
-                IsolationLevel = attribute.IsolationLevel,
-                Timeout = attribute.Timeout
-            },
-            TransactionScopeAsyncFlowOption.Enabled))
-        {
-			try
-			{
-				await ExecuteCore(onResult);
-				scope.Complete();
-			}
-			catch (Exception e)
-			{
-				Log.Logger.Error(e, "ServiceLoader OnExecuted Error : {Error}", e.Message);
-				throw;
-			}
-		}
-		
-		sw.Stop();
-        Log.Logger.Information("execute service time : {time}", sw.Elapsed.TotalSeconds);
+        _onResult = onResult;
     }
 
     #region [execute core]
 
-    private async Task ExecuteCore(Action<TResult> resultBehavior = null)
+    public override async Task ExecuteCore()
     {
         if (InvokedFilter().xIsFalse()) return;
 
@@ -115,7 +91,7 @@ public class ServiceLoader<TRequest, TResult> : DisposeBase
 
         await GetCacheAsync();
 
-        await ExecuteAsync(resultBehavior);
+        await ExecuteAsync(_onResult);
 
         await SetCacheAsync();
     }

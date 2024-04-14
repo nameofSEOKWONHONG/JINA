@@ -1,11 +1,13 @@
 ﻿using eXtensionSharp;
+using Jina.Database.Abstract;
 using Jina.Lang.Abstract;
+using Microsoft.AspNetCore.Http;
 
 namespace Jina.Session.Abstract;
 
 public interface ISessionContext
 {
-    bool IsUnknown { get { return TenantId.xIsEmpty(); } }
+    bool IsUnknown => TenantId.xIsEmpty();
 
     string TenantId { get; }
 
@@ -20,6 +22,16 @@ public interface ISessionContext
     ISessionDateTime CurrentTime { get; }
 
     ILocalizer Localizer { get; }
+    
+    IDbContext DbContext { get; }
+    
+    IDbProviderBase DbProvider { get; }
+
+    IHttpContextAccessor HttpContextAccessor { get; }
+    
+    IHttpClientFactory HttpClientFactory { get; }
+    
+    CancellationToken CancellationToken { get; }
 
     bool IsDecrypt { get; }
 }

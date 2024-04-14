@@ -7,5 +7,5 @@ public interface ISetParameter<TRequest, TResult>
 {
     IValidation<TRequest, TResult> SetValidator(Validator<TRequest> validator);
 
-    Task OnExecutedAsync(Action<TResult> result);
+    void OnExecuted(Action<TResult> result);
 }

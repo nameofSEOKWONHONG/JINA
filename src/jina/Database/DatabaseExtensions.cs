@@ -29,9 +29,9 @@ public static class DatabaseExtensions
         {
             return implType switch
             {
-                ENUM_DB_TYPE.Mssql => sp.GetRequiredService<MsSqlProviderBase>(),
-                ENUM_DB_TYPE.Mysql => sp.GetRequiredService<MySqlProviderBase>(),
-                ENUM_DB_TYPE.Npgsql => sp.GetRequiredService<NpgSqlProviderBase>(),
+                ENUM_DB_TYPE.Mssql => sp.GetRequiredService<MsSqlProvider>(),
+                ENUM_DB_TYPE.Mysql => sp.GetRequiredService<MySqlProvider>(),
+                ENUM_DB_TYPE.Npgsql => sp.GetRequiredService<NpgSqlProvider>(),
                 _ => throw new NotImplementedException()
             };
         });
@@ -45,35 +45,7 @@ public static class DatabaseExtensions
     /// <param name="creator"></param>
     /// <typeparam name="TImpl"></typeparam>
     /// <returns></returns>
-    public static IServiceCollection AddJinaMssql<TImpl>(this IServiceCollection services, Func<TImpl> creator)
-        where TImpl : DbProviderBase
-    {
-        services.AddTransient<IDbProviderBase, TImpl>(sp => creator());
-        return services;
-    }
-    
-    /// <summary>
-    /// if use single database
-    /// </summary>
-    /// <param name="services"></param>
-    /// <param name="creator"></param>
-    /// <typeparam name="TImpl"></typeparam>
-    /// <returns></returns>
-    public static IServiceCollection AddJinaMysql<TImpl>(this IServiceCollection services, Func<TImpl> creator)
-        where TImpl : DbProviderBase
-    {
-        services.AddTransient<IDbProviderBase, TImpl>(sp => creator());
-        return services;
-    }
-    
-    /// <summary>
-    /// if use single database
-    /// </summary>
-    /// <param name="services"></param>
-    /// <param name="creator"></param>
-    /// <typeparam name="TImpl"></typeparam>
-    /// <returns></returns>
-    public static IServiceCollection AddJinaNpgsql<TImpl>(this IServiceCollection services, Func<TImpl> creator)
+    public static IServiceCollection AddJinaDatabase<TImpl>(this IServiceCollection services, Func<TImpl> creator)
         where TImpl : DbProviderBase
     {
         services.AddTransient<IDbProviderBase, TImpl>(sp => creator());

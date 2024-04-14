@@ -5,18 +5,18 @@ using MySql.Data.MySqlClient;
 
 namespace Jina.Database;
 
-public class MySqlProviderBase : DbProviderBase
+public class MySqlProvider : DbProviderBase
 {
     private MySqlConnection _mySqlConnection;
     private readonly string _connectionString;
     
-    protected MySqlProviderBase(string connectionString)
+    public MySqlProvider(string connectionString)
     {
         _mySqlConnection = new MySqlConnection(connectionString);
         _connectionString = connectionString;
     }
 
-    protected MySqlProviderBase(MySqlConnection connection)
+    public MySqlProvider(MySqlConnection connection)
     {
         _mySqlConnection = connection;
         _connectionString = _mySqlConnection.ConnectionString;

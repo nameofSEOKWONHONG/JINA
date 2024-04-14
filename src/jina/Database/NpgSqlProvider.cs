@@ -4,13 +4,13 @@ using Npgsql;
 
 namespace Jina.Database;
 
-public class NpgSqlProviderBase : DbProviderBase
+public class NpgSqlProvider : DbProviderBase
 {
     private readonly NpgsqlDataSourceBuilder _dataSourceBuilder;
     private readonly NpgsqlDataSource _dataSource;
     private readonly string _connectionString;
     
-    protected NpgSqlProviderBase(NpgsqlDataSourceBuilder dataSourceBuilder)
+    public NpgSqlProvider(NpgsqlDataSourceBuilder dataSourceBuilder)
     {
         // var connStringBuilder = new NpgsqlConnectionStringBuilder
         // {
@@ -27,7 +27,7 @@ public class NpgSqlProviderBase : DbProviderBase
     }
 
     
-    protected NpgSqlProviderBase(string connectionString)
+    protected NpgSqlProvider(string connectionString)
     {
         _dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         _dataSource = _dataSourceBuilder.Build();
