@@ -67,7 +67,7 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
         return this;
     }
 
-    public IExecutor<TRequest, TResult> OnError(Action<ValidationResult> validateBehavior)
+    public IExecutor<TRequest, TResult> OnValidated(Action<ValidationResult> validateBehavior)
     {
         _validateBehavior = validateBehavior;
         return this;

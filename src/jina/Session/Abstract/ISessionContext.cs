@@ -33,5 +33,5 @@ public interface ISessionContext
     
     CancellationToken CancellationToken { get; }
 
-    bool IsDecrypt { get; }
+    bool IsDecrypt { get; set; }
 }

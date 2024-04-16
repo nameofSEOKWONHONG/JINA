@@ -3,6 +3,7 @@
 public interface ISessionCurrentUser
 {
     string TenantId { get; }
+    string Email { get; }
     string TimeZone { get; }
     string UserId { get; }
     string UserName { get; }

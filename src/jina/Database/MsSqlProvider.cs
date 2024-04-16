@@ -9,6 +9,12 @@ public class MsSqlProvider : DbProviderBase
 {
     private SqlConnection _sqlConnection;
     private readonly string _connectionString;
+
+    public MsSqlProvider()
+    {
+        
+    }
+    
     public MsSqlProvider(string connectionString)
     {
         _sqlConnection = new SqlConnection(connectionString);
