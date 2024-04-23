@@ -1,12 +1,9 @@
-using System.Diagnostics;
-using System.Transactions;
 using eXtensionSharp;
+using FluentValidation;
 using FluentValidation.Results;
-using Jina.Base.Attributes;
 using Jina.Base.Service.Abstract;
 using Jina.Validate;
 using Microsoft.Extensions.Caching.Distributed;
-using Serilog;
 
 namespace Jina.Base.Service;
 
@@ -19,7 +16,6 @@ public abstract class ServiceLoaderBase : DisposeBase
 public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
     , IAddFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>
-    , IUseTransaction<TRequest, TResult>
     , IValidation<TRequest, TResult>
     , IExecutor<TRequest, TResult>
 {
@@ -29,7 +25,7 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
 
     private List<Func<bool>> _filters = new();
     private Func<TRequest> _parameter;
-    private Validator<TRequest> _validator;
+    private Func<AbstractValidator<TRequest>> _onValidator;
     private Action<ValidationResult> _validateBehavior;
     private Action<TResult> _onResult;
 
@@ -61,9 +57,9 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
         return this;
     }
 
-    public IValidation<TRequest, TResult> SetValidator(Validator<TRequest> validator)
+    public IValidation<TRequest, TResult> SetValidator(Func<AbstractValidator<TRequest>> onValidator)
     {
-        _validator = validator;
+        _onValidator = onValidator;
         return this;
     }
 
@@ -121,9 +117,9 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
 
     private async Task<bool> InvokedValidatingAsync(TRequest parameter)
     {
-        if (_validator.xIsNotEmpty())
+        if (_onValidator.xIsNotEmpty())
         {
-            var rs = await _validator.ValidateAsync(parameter);
+            var rs = await _onValidator().ValidateAsync(parameter);
             if (rs.IsValid.xIsFalse())
             {
                 _validateBehavior(rs);

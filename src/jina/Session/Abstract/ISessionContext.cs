@@ -1,4 +1,5 @@
 ﻿using eXtensionSharp;
+using Hangfire;
 using Jina.Database.Abstract;
 using Jina.Lang.Abstract;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,8 @@ public interface ISessionContext
     IHttpContextAccessor HttpContextAccessor { get; }
     
     IHttpClientFactory HttpClientFactory { get; }
+    
+    IBackgroundJobClient JobClient { get; }
     
     CancellationToken CancellationToken { get; }
 

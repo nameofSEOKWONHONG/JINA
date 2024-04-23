@@ -1,6 +1,6 @@
 ﻿namespace Jina.Application.Configuration;
 
-public class MailConfigOption
+public class EmailConfig
 {
     /// <summary>
     /// 발신자 Email
