@@ -2,6 +2,7 @@ using System.Reflection;
 using eXtensionSharp;
 using Jina.Base.Service.Abstract;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Jina.Injection;
 
@@ -22,12 +23,15 @@ public static class ScanExtensions
         services.Scan(scan => scan
             .FromAssemblies(assemblies)
             .AddClasses(cls => cls.AssignableTo<IScopeService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithScopedLifetime()           
             .AddClasses(cls => cls.AssignableTo<ITransientService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithTransientLifetime()         
             .AddClasses(cls => cls.AssignableTo<ISingletonService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithSingletonLifetime()
         );
@@ -35,23 +39,20 @@ public static class ScanExtensions
         return services;
     }
     
-    public static IServiceCollection AddJinaScan(this IServiceCollection services, Type[] types)
+    public static IServiceCollection AddJinaScan(this IServiceCollection services, Assembly[] assemblies)
     {
-        var assemblies = new List<Assembly>();
-        types.xForEach(item =>
-        {
-            assemblies.Add(item.Assembly);
-        });
-        
         services.Scan(scan => scan
             .FromAssemblies(assemblies)
             .AddClasses(cls => cls.AssignableTo<IScopeService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithScopedLifetime()           
             .AddClasses(cls => cls.AssignableTo<ITransientService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithTransientLifetime()         
             .AddClasses(cls => cls.AssignableTo<ISingletonService>())
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsImplementedInterfaces()
             .WithSingletonLifetime()
         );

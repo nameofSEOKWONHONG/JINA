@@ -28,4 +28,10 @@ public static class ValidationExtensions
         services.AddValidatorsFromAssemblies(assemblies);
         return services;
     }
+
+    public static IServiceCollection AddValidator(this IServiceCollection services, Assembly[] assemblies)
+    {
+        services.AddValidatorsFromAssemblies(assemblies);
+        return services;   
+    }
 }
