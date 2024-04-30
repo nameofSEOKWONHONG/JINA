@@ -7,7 +7,6 @@ namespace Jina.Database;
 
 public class MsSqlProvider : DbProviderBase
 {
-    private SqlConnection _sqlConnection;
     private readonly string _connectionString;
 
     public MsSqlProvider()
@@ -17,31 +16,25 @@ public class MsSqlProvider : DbProviderBase
     
     public MsSqlProvider(string connectionString)
     {
-        _sqlConnection = new SqlConnection(connectionString);
         _connectionString = connectionString;
     }
-
-    public MsSqlProvider(SqlConnection connection)
-    {
-        _sqlConnection = connection;
-        _connectionString = _sqlConnection.ConnectionString;
-    }
     
-    public override async Task<IDbConnection> GetDbConnectionAsync()
+    public override async Task<IDbConnection> CreateAsync()
     {
+        var connection = new SqlConnection(_connectionString);
         //TODO : 만약 Repository 패턴으로 작성한다면 아래와 같이 처리되어야 한다.
-        if (_sqlConnection.State == ConnectionState.Closed &&
-            _sqlConnection.ConnectionString.xIsEmpty())
+        if (connection.State == ConnectionState.Closed &&
+            connection.ConnectionString.xIsEmpty())
         {
-            _sqlConnection = new SqlConnection(_connectionString);
+            connection = new SqlConnection(_connectionString);
         }
         
         //TODO : 만약 Inserter, Updater, Deleter등으로 구분한다면 아래와 같이 처리 되어야 한다.
-        if (_sqlConnection.State != ConnectionState.Open)
+        if (connection.State != ConnectionState.Open)
         {
-            await _sqlConnection.OpenAsync();
+            await connection.OpenAsync();
         }
 
-        return _sqlConnection;
+        return connection;
     }
 }

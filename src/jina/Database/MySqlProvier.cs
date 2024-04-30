@@ -7,36 +7,29 @@ namespace Jina.Database;
 
 public class MySqlProvider : DbProviderBase
 {
-    private MySqlConnection _mySqlConnection;
     private readonly string _connectionString;
     
     public MySqlProvider(string connectionString)
     {
-        _mySqlConnection = new MySqlConnection(connectionString);
         _connectionString = connectionString;
     }
-
-    public MySqlProvider(MySqlConnection connection)
-    {
-        _mySqlConnection = connection;
-        _connectionString = _mySqlConnection.ConnectionString;
-    }
     
-    public override async Task<IDbConnection> GetDbConnectionAsync()
+    public override async Task<IDbConnection> CreateAsync()
     {
+        var connection = new MySqlConnection(_connectionString);
         //TODO : 만약 Repository 패턴으로 작성한다면 아래와 같이 처리되어야 한다.
-        if (_mySqlConnection.State == ConnectionState.Closed &&
-            _mySqlConnection.ConnectionString.xIsEmpty())
+        if (connection.State == ConnectionState.Closed &&
+            connection.ConnectionString.xIsEmpty())
         {
-            _mySqlConnection = new MySqlConnection(_connectionString);
+            connection = new MySqlConnection(_connectionString);
         }
         
         //TODO : 만약 Inserter, Updater, Deleter등으로 구분한다면 아래와 같이 처리 되어야 한다.
-        if (_mySqlConnection.State != ConnectionState.Open)
+        if (connection.State != ConnectionState.Open)
         {
-            await _mySqlConnection.OpenAsync();
+            await connection.OpenAsync();
         }
 
-        return _mySqlConnection;
+        return connection;
     }
 }

@@ -7,12 +7,12 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Jina.Base.Service;
 
-public abstract class ServiceLoaderBase : DisposeBase
-{
-    public IServiceImplBase Self { get; init; }
-    public abstract Task ExecuteCore();
-}
 
+/// <summary>
+/// ServiceLoader class definition with generic types TRequest and TResult. It implements interfaces for adding filters, setting parameters, validation, and execution.
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResult"></typeparam>
 public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
     , IAddFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>

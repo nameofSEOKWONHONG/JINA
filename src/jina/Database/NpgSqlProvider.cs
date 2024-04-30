@@ -34,7 +34,7 @@ public class NpgSqlProvider : DbProviderBase
         _connectionString = connectionString;
     }
     
-    public override async Task<IDbConnection> GetDbConnectionAsync()
+    public override async Task<IDbConnection> CreateAsync()
     {
         var conn = await _dataSource.OpenConnectionAsync();
         if (conn.State != ConnectionState.Open)

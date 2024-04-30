@@ -4,5 +4,5 @@ namespace Jina.Database.Abstract;
 
 public interface IDbProviderBase
 {
-    Task<IDbConnection> GetDbConnectionAsync();
+    Task<IDbConnection> CreateAsync();
 }
