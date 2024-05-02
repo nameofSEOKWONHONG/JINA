@@ -1,10 +1,8 @@
 namespace Jina.Base;
 
-public class DisposeBase : IDisposable
+public abstract class DisposeBase : IDisposable
 {
-    private bool _disposed;
-    
-    ~DisposeBase() => Dispose(false);
+    private volatile bool _disposed;
 
     public void Dispose()
     {
@@ -21,8 +19,7 @@ public class DisposeBase : IDisposable
 
         if (disposing)
         {
+            _disposed = true;
         }
-
-        _disposed = true;
     }
 }

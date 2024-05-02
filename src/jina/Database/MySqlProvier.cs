@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using eXtensionSharp;
 using Jina.Database.Abstract;
 using MySql.Data.MySqlClient;
@@ -6,30 +7,38 @@ using MySql.Data.MySqlClient;
 namespace Jina.Database;
 
 public class MySqlProvider : DbProviderBase
-{
-    private readonly string _connectionString;
-    
+{   
     public MySqlProvider(string connectionString)
     {
-        _connectionString = connectionString;
+        this.ConnectionString = connectionString;
+        this.DbConnection = new MySqlConnection(this.ConnectionString);
     }
     
-    public override async Task<IDbConnection> CreateAsync()
+    public override async Task CreateAsync()
     {
-        var connection = new MySqlConnection(_connectionString);
-        //TODO : 만약 Repository 패턴으로 작성한다면 아래와 같이 처리되어야 한다.
-        if (connection.State == ConnectionState.Closed &&
-            connection.ConnectionString.xIsEmpty())
-        {
-            connection = new MySqlConnection(_connectionString);
-        }
-        
         //TODO : 만약 Inserter, Updater, Deleter등으로 구분한다면 아래와 같이 처리 되어야 한다.
-        if (connection.State != ConnectionState.Open)
+        if (this.DbConnection.State != ConnectionState.Open)
         {
-            await connection.OpenAsync();
+            await this.DbConnection.OpenAsync();
         }
+    }
 
-        return connection;
+    public override async Task BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken ct = default)
+    {
+        if (this.DbConnection.xIsEmpty()) throw new Exception("Connection is not init");
+        if (this.DbTransaction.xIsEmpty())
+        {
+            this.DbTransaction = await this.DbConnection.BeginTransactionAsync(isolationLevel, ct);
+        }
+    }
+
+    public override DbConnection Connection()
+    {
+        return this.DbConnection;
+    }
+
+    public override DbTransaction Transaction()
+    {
+        return this.DbTransaction;
     }
 }

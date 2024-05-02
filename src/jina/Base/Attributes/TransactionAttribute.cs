@@ -8,7 +8,7 @@ namespace Jina.Base.Attributes
 		public IsolationLevel IsolationLevel { get; }
 		public TimeSpan Timeout { get; }
 		
-		public ENUM_TRANSACTION_DB_TYPE TransactionDbType { get; }
+		// public ENUM_TRANSACTION_DB_TYPE TransactionDbType { get; }
 
 		
 		/// <summary>
@@ -24,12 +24,12 @@ namespace Jina.Base.Attributes
 #else
 			, int timeoutSeconds = 5
 #endif
-			, ENUM_TRANSACTION_DB_TYPE type = ENUM_TRANSACTION_DB_TYPE.EF
+			// , ENUM_TRANSACTION_DB_TYPE type = ENUM_TRANSACTION_DB_TYPE.EF
 		)
 		{
 			IsolationLevel = isolationLevel;
 			Timeout = TimeSpan.FromSeconds(timeoutSeconds);
-			TransactionDbType = type;
+			// TransactionDbType = type;
 		}
 	}
 	

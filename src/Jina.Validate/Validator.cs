@@ -1,13 +1,20 @@
 using System.Linq.Expressions;
 using eXtensionSharp;
 using FluentValidation;
+using Jina.Lang.Abstract;
 
 namespace Jina.Validate;
 
 public abstract class Validator<T> : AbstractValidator<T>
 {
+    protected ILocalizer Localizer;
     protected Validator()
     {
+    }
+
+    protected Validator(ILocalizer localizer)
+    {
+        Localizer = localizer;
     }
 
     protected void NotEmpty<TProperty>(Expression<Func<T, TProperty>> expression, string message = null)

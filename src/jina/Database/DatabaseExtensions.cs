@@ -48,7 +48,7 @@ public static class DatabaseExtensions
     public static IServiceCollection AddJinaDatabase<TImpl>(this IServiceCollection services, Func<TImpl> creator)
         where TImpl : DbProviderBase
     {
-        services.AddSingleton<IDbProviderBase, TImpl>(sp => creator());
+        services.AddScoped<IDbProviderBase, TImpl>(sp => creator());
         return services;
     }
 }

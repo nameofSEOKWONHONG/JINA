@@ -31,11 +31,6 @@ public class SqlBulkBuilder<T>
     public async Task BulkInsertAsync(string schema, string tableName, T[] items)
     {
         if (items.xIsEmpty()) return;
-        
-        for (var i = 0; i < items.Length; i++)
-        {
-            var item = items[i];
-        }        
 
 		var batchItems = items.xBatch(BATCH_SIZE);
         foreach (T[] batchItem in batchItems)
