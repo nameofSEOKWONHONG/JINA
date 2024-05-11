@@ -26,20 +26,20 @@ public class JConcurrencyGuard
         if (redLock.IsAcquired.xIsFalse())
         {
             System.Console.WriteLine(
-                $"{DateTime.UtcNow.ToString(ENUM_DATE_FORMAT.YYYY_MM_DD_HH_MM_SS_FFF)} Could not acquire lockfor {eventName}");
+                $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} Could not acquire lockfor {eventName}");
             return false;
         }
         System.Console.WriteLine(
-            $"{DateTime.UtcNow.ToString(ENUM_DATE_FORMAT.YYYY_MM_DD_HH_MM_SS_FFF)} Acquired lock for {eventName}");
+            $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} Acquired lock for {eventName}");
         var cached = await _distributedCache.GetAsync(key);
         if (cached.xIsEmpty())
         {
             System.Console.WriteLine(
-                $"{DateTime.UtcNow.ToString(ENUM_DATE_FORMAT.YYYY_MM_DD_HH_MM_SS_FFF)} No duplicate event found. Adding Event: {eventName}");
+                $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} No duplicate event found. Adding Event: {eventName}");
 
             await _distributedCache.SetAsync(key, valueBytes);
             System.Console.WriteLine(
-                $"{DateTime.UtcNow.ToString(ENUM_DATE_FORMAT.YYYY_MM_DD_HH_MM_SS_FFF)} Added Event: {eventName}");
+                $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} Added Event: {eventName}");
 
             return true;
         }

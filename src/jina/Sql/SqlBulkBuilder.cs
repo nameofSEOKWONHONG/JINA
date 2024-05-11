@@ -128,7 +128,7 @@ public class SqlBulkBuilder<T>
             {
                 var v = prop.GetValue(item).xValue<DateTime>();
                 if (v.xIsEmpty()) return $"NULL, ";
-                return $"N'{v.ToString(ENUM_DATE_FORMAT.YYYY_MM_DD_HH_MM_SS_FFF)}', ";
+                return $"N'{v:yyyy-MM-dd HH:mm:ss}', ";
             }
         },
         {
@@ -152,12 +152,12 @@ public class SqlBulkBuilder<T>
         var sbPool = JStringBuilderPool.Create(items.Length);
         
         var result = new List<string>();
-        items.xForEach((item, i) =>
+        items.xForEach(( i, item) =>
         {
             var props = item.xGetProperties();
             var statement = sbPool.Rent();
             statement.Append("(");            
-            props.xForEach((prop, j) =>
+            props.xForEach((j, prop) =>
             {
                 var exist = columns.xFirst(m => m == prop.Name);
                 if (exist.xIsEmpty()) return true;

@@ -12,7 +12,7 @@ namespace Jina.Base.Service;
 
 public class ServicePipeline : DisposeBase
 {
-    private readonly Queue<ServiceLoaderBase> _services = new Queue<ServiceLoaderBase>();
+    private readonly Queue<ServiceLoaderBase> _services = new();
     private readonly ISessionContext _sessionContext;
     
     /// <summary>
@@ -32,7 +32,7 @@ public class ServicePipeline : DisposeBase
         
         return svc;
     }
-
+    
     public async Task ExecuteAsync()
     {
         try

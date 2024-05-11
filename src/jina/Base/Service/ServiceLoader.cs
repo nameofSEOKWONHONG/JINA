@@ -2,7 +2,6 @@ using eXtensionSharp;
 using FluentValidation;
 using FluentValidation.Results;
 using Jina.Base.Service.Abstract;
-using Jina.Validate;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Jina.Base.Service;
@@ -36,7 +35,7 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
     private IDistributedCache _cache;
     private string _cacheKey;
     private DistributedCacheEntryOptions _cacheEntryOptions;
-
+    private bool _useCache;
     #endregion [cache]
 
     internal ServiceLoader(IServiceImplBase<TRequest, TResult> service)
@@ -54,6 +53,14 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
     public ISetParameter<TRequest, TResult> SetParameter(Func<TRequest> onParameter)
     {
         this._parameter = onParameter;
+        return this;
+    }
+
+
+    public ISetParameter<TRequest, TResult> UseCache(string cacheKey = null, DistributedCacheEntryOptions cacheEntryOptions = null)
+    {
+        this._cacheKey = cacheKey;
+        this._useCache = true;
         return this;
     }
 
@@ -78,24 +85,59 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
 
     public override async Task ExecuteCore()
     {
+        #region [use cache]
+
+        if (_useCache)
+        {
+            //캐시에 대한 키 설정이 없을 경우 Request를 기본으로 한다.
+            if (_cacheKey.xIsEmpty())
+            {
+                _service.Result = await GetCacheAsync(_service.Request.xToJson().xGetHashCode());
+            }
+            else
+            {
+                _service.Result = await GetCacheAsync(_cacheKey);
+            }
+        }
+
+        if (_service.Result.xIsNotEmpty())
+        {
+            if (_onResult.xIsNotEmpty())
+            {
+                _onResult(_service.Result);
+                return;
+            }
+        }        
+
+        #endregion
+
+        #region [use validate]
+
         if (InvokedFilter().xIsFalse()) return;
 
         InvokedParameter();
 
         var valid = await InvokedValidatingAsync(_service.Request);
-        if (valid.xIsFalse()) return;
+        if (valid.xIsFalse()) return;        
 
-        await GetCacheAsync();
+        #endregion
 
         await ExecuteAsync(_onResult);
 
-        await SetCacheAsync();
+        #region [use cache]
+
+        if (_useCache)
+        {
+            await SetCacheAsync(_cacheKey, _service.Result.xToBytes(), _cacheEntryOptions);
+        }        
+
+        #endregion
     }
 
     private bool InvokedFilter()
     {
         var filterValid = true;
-        _filters.ForEach(filter =>
+        _filters.xForEachSpan(filter =>
         {
             filterValid = filter.Invoke();
             if (filterValid.xIsFalse()) return;
@@ -131,20 +173,20 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
         return true;
     }
 
-    private async Task GetCacheAsync()
+    private async Task<TResult> GetCacheAsync(string key)
     {
+        if (key.xIsEmpty()) throw new Exception("cache key is empty");
+        
         if (_cache.xIsNotEmpty())
         {
-            var bytes = await _cache.GetAsync(_cacheKey.xGetHashCode());
+            var bytes = await _cache.GetAsync(key);
             if (bytes.xIsNotEmpty())
             {
-                var exist = bytes.xToString().xToEntity<TResult>();
-                if (exist.xIsNotEmpty())
-                {
-                    _service.Result = exist;
-                }
+                return bytes.xToString().xToEntity<TResult>();
             }
         }
+
+        return default;
     }
 
     private async Task ExecuteAsync(Action<TResult> resultBehavior)
@@ -160,14 +202,21 @@ public class ServiceLoader<TRequest, TResult> : ServiceLoaderBase
         }
     }
 
-    private async Task SetCacheAsync()
+    private async Task SetCacheAsync(string key, byte[] bytes,  DistributedCacheEntryOptions cacheEntryOptions)
     {
+        if (key.xIsEmpty()) throw new Exception("cache key is empty");
+        if (bytes.xIsEmpty()) throw new Exception("result is empty");
+
+        if (cacheEntryOptions.xIsEmpty())
+        {
+            //기본 설정이 없을 경우 1분 만료
+            cacheEntryOptions = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+        }
+        
         if (_cache.xIsNotEmpty())
         {
-            if (_service.Result.xIsNotEmpty())
-            {
-                await _cache.SetAsync(_cacheKey.xGetHashCode(), _service.Result.xToBytes(), _cacheEntryOptions);
-            }
+            await _cache.SetAsync(key.xGetHashCode(), bytes, cacheEntryOptions);
         }
     }
 

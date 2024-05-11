@@ -19,6 +19,7 @@
     * Validation은 Jina.Lang과 결합되어 다국어를 지원합니다.
 * Jina.SequenceGenerator ``` 언제든 제거 될 수 있습니다. ```
     * EF를 이용한 수동 채번에 대한 구현입니다.
+* 예제는 다음의 URL을 참조 하세요. [jina.application](https://github.com/nameofSEOKWONHONG/Jina.Application)
 
 ## 주의
 * Jina.Lang, Jina.Validate는 Blazor SPA Client를 고려하여 Jina에 대한 의존성이 없습니다.
