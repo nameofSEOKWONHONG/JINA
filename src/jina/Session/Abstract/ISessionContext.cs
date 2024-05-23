@@ -3,6 +3,7 @@ using Hangfire;
 using Jina.Database.Abstract;
 using Jina.Lang.Abstract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Jina.Session.Abstract;
 
@@ -34,7 +35,7 @@ public interface ISessionContext
     
     IBackgroundJobClient JobClient { get; }
     
-    CancellationToken CancellationToken { get; }
+    IDistributedCache DistributedCache { get; }
 
     bool IsDecrypt { get; set; }
 }

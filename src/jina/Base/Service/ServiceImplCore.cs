@@ -1,5 +1,6 @@
 ﻿using Jina.Base.Service.Abstract;
 using Jina.Database.Abstract;
+using Jina.Session.Abstract;
 
 namespace Jina.Base.Service;
 
@@ -15,14 +16,13 @@ public abstract class ServiceImplCore<TSelf>
 }
 
 public abstract class ServiceImplCore<TSelf, TRequest, TResult>
-    : ServiceImplCore<TSelf>, IServiceImplBase<TRequest, TResult>
+    : ServiceImplCore<TSelf>
 {
-    
     protected ServiceImplCore() : base()
     {
     }
 
-    public abstract Task OnExecutingAsync();
+    public abstract Task<bool> OnExecutingAsync();
 
     public abstract Task OnExecuteAsync();
 

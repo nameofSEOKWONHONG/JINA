@@ -1,8 +1,11 @@
-﻿namespace Jina.Base.Service.Abstract;
+﻿using Jina.Session.Abstract;
+
+namespace Jina.Base.Service.Abstract;
 
 public interface IServiceImplBase
 {
-    Task OnExecutingAsync();
+    ISessionContext Context { get; }
+    Task<bool> OnExecutingAsync();
     Task OnExecuteAsync();
 }
 
