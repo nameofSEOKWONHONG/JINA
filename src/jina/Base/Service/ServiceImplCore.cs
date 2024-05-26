@@ -1,16 +1,18 @@
 ﻿using Jina.Base.Service.Abstract;
 using Jina.Database.Abstract;
 using Jina.Session.Abstract;
+using Microsoft.Extensions.Logging;
 
 namespace Jina.Base.Service;
 
 public abstract class ServiceImplCore<TSelf>
 {
-    protected Serilog.ILogger Logger => Serilog.Log.Logger;
+    protected ILogger Logger;
 
-    protected ServiceImplCore()
+    protected ServiceImplCore(ILogger logger)
     {
-        this.Logger.Debug("Create Instance : {Instance}", typeof(TSelf).Name);
+        this.Logger = logger;
+        this.Logger.LogDebug("Create Instance : {Instance}", typeof(TSelf).Name);
     }
 
 }
@@ -18,7 +20,11 @@ public abstract class ServiceImplCore<TSelf>
 public abstract class ServiceImplCore<TSelf, TRequest, TResult>
     : ServiceImplCore<TSelf>
 {
-    protected ServiceImplCore() : base()
+    /// <summary>
+    /// ctor
+    /// </summary>
+    /// <param name="logger"></param>
+    protected ServiceImplCore(ILogger<TSelf> logger) : base(logger)
     {
     }
 

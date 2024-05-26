@@ -1,5 +1,6 @@
 ﻿using eXtensionSharp;
 using Hangfire;
+using Jina.Database;
 using Jina.Database.Abstract;
 using Jina.Lang.Abstract;
 using Microsoft.AspNetCore.Http;
@@ -37,5 +38,7 @@ public interface ISessionContext
     
     IDistributedCache DistributedCache { get; }
 
+    IFSql FSql { get; }
+    
     bool IsDecrypt { get; set; }
 }

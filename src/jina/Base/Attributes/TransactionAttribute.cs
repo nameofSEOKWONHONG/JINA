@@ -1,4 +1,5 @@
-﻿using IsolationLevel = System.Data.IsolationLevel;
+﻿using eXtensionSharp;
+using IsolationLevel = System.Data.IsolationLevel;
 
 namespace Jina.Base.Attributes
 {
@@ -8,7 +9,7 @@ namespace Jina.Base.Attributes
 		public IsolationLevel IsolationLevel { get; }
 		public TimeSpan Timeout { get; }
 		
-		// public ENUM_TRANSACTION_DB_TYPE TransactionDbType { get; }
+		public ENUM_DB_PROVIDER_TYPE DbProviderType { get; }
 
 		
 		/// <summary>
@@ -18,24 +19,23 @@ namespace Jina.Base.Attributes
 		/// <param name="timeoutSeconds"></param>
 		public TransactionOptionsAttribute(
 			IsolationLevel isolationLevel = IsolationLevel.Snapshot
-#if DEBUG			
-			, int timeoutSeconds = 3200
-			
-#else
+			, ENUM_DB_PROVIDER_TYPE providerType = ENUM_DB_PROVIDER_TYPE.EF
 			, int timeoutSeconds = 5
-#endif
-			// , ENUM_TRANSACTION_DB_TYPE type = ENUM_TRANSACTION_DB_TYPE.EF
 		)
 		{
 			IsolationLevel = isolationLevel;
+			#if DEBUG
+			Timeout = TimeSpan.FromSeconds(3200);
+			#else
 			Timeout = TimeSpan.FromSeconds(timeoutSeconds);
-			// TransactionDbType = type;
+			#endif
+			DbProviderType = providerType;
 		}
 	}
 	
-	public enum ENUM_TRANSACTION_DB_TYPE
+	public enum ENUM_DB_PROVIDER_TYPE
 	{
 		EF,
-		ADO
+		FreeSql
 	}
 }

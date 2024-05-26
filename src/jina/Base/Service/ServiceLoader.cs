@@ -13,31 +13,36 @@ namespace Jina.Base.Service;
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResult"></typeparam>
 public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
-    , IAddFilter<TRequest, TResult>
+    , IWhereFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>
     , IValidation<TRequest, TResult>
     , IExecutor<TRequest, TResult>
 {
-    public IServiceImplBase Self { get; private set; }
+    public IServiceImplBase Self { get; }
+
+    #region [variable]
+
     private readonly IServiceImplBase<TRequest, TResult> _service;
 
     #region [action behavior's]
 
-    private readonly List<Func<bool>> _filters = new();
+    private readonly List<Func<bool>> _conditions = new();
     private Func<TRequest> _parameter;
-    private Func<AbstractValidator<TRequest>> _onValidator;
-    private Action<ValidationResult> _validateBehavior;
-    private Action<TResult> _onResult;
+    private Func<AbstractValidator<TRequest>> _validate;
+    private Action<ValidationResult> _validateResult;
+    private Action<TResult> _then;
 
     #endregion [action behavior's]
 
     #region [cache]
-
-    private IDistributedCache _cache;
+    
     private string _cacheKey;
     private DistributedCacheEntryOptions _cacheEntryOptions;
     private bool _useCache;
     #endregion [cache]
+
+    #endregion
+    
 
     /// <summary>
     /// ctor
@@ -52,20 +57,20 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
 
     #region [impl chain methods]
 
-    public IAddFilter<TRequest, TResult> AddFilter(Func<bool> onFilter)
+    public IWhereFilter<TRequest, TResult> Where(Func<bool> condition)
     {
-        this._filters.Add(onFilter);
+        this._conditions.Add(condition);
         return this;
     }
 
-    public ISetParameter<TRequest, TResult> SetParameter(Func<TRequest> onParameter)
+    public ISetParameter<TRequest, TResult> WithParameter(Func<TRequest> onParameter)
     {
         this._parameter = onParameter;
         return this;
     }
 
 
-    public ISetParameter<TRequest, TResult> UseCache(string cacheKey = null, DistributedCacheEntryOptions cacheEntryOptions = null)
+    public ISetParameter<TRequest, TResult> WithCache(string cacheKey = null, DistributedCacheEntryOptions cacheEntryOptions = null)
     {
         this._cacheKey = cacheKey;
         this._useCache = true;
@@ -80,21 +85,21 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
         return this;
     }
 
-    public IValidation<TRequest, TResult> SetValidator(Func<AbstractValidator<TRequest>> onValidator)
+    public IValidation<TRequest, TResult> WithValidator(Func<AbstractValidator<TRequest>> validate)
     {
-        _onValidator = onValidator;
+        _validate = validate;
         return this;
     }
 
-    public IExecutor<TRequest, TResult> OnValidated(Action<ValidationResult> validateBehavior)
+    public IExecutor<TRequest, TResult> ThenValidate(Action<ValidationResult> validateResult)
     {
-        _validateBehavior = validateBehavior;
+        _validateResult = validateResult;
         return this;
     }
 
-    public void OnExecuted(Action<TResult> onResult)
+    public void Then(Action<TResult> then)
     {
-        _onResult = onResult;
+        _then = then;
     }
 
     #endregion
@@ -103,59 +108,52 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
 
     public async Task ExecuteCore()
     {
-        try
-        {
-            #region [execute filter, parameter, get cache, validator]
+        #region [execute filter, parameter, get cache, validator]
 
-            if (InvokedFilter().xIsFalse()) return;
+        if (WhereClause().xIsFalse()) return;
 
-            InvokedParameter();
+        SetParameter();
         
-            #region [use cache]
+        #region [use cache]
 
-            if (_useCache)
+        if (_useCache)
+        {
+            if (typeof(TResult).IsInterface)
             {
-                if (typeof(TResult).IsInterface)
-                {
-                    throw new Exception("The cache does not allow interface types");
-                }
-
-                var hasCache = await TryGetCacheAsync();
-                if (hasCache)
-                {
-                    _onResult(_service.Result);
-                    return;
-                }
+                throw new Exception("The cache does not allow interface types");
             }
 
-            #endregion        
-
-            var valid = await InvokedValidatingAsync(_service.Request);
-            if (valid.xIsFalse()) return;        
-
-            #endregion
-
-            await ExecuteAsync(_onResult);
-
-            #region [execute set cache]
-
-            if (_useCache)
+            var hasCache = await TryGetCacheAsync();
+            if (hasCache)
             {
-                await SetCacheAsync();
-            }        
+                _then(_service.Result);
+                return;
+            }
+        }
 
-            #endregion
-        }
-        catch (Exception ex)
+        #endregion        
+
+        var valid = await ValidateAsync(_service.Request);
+        if (valid.xIsFalse()) return;        
+
+        #endregion
+
+        await ExecuteAsync(_then);
+
+        #region [execute set cache]
+
+        if (_useCache)
         {
-            Log.Logger.Error(ex, "Error occurred during execution");
-        }
+            await SetCacheAsync();
+        }        
+
+        #endregion
     }
 
-    private bool InvokedFilter()
+    private bool WhereClause()
     {
         var filterValid = true;
-        _filters.xForEachSpan(filter =>
+        _conditions.xForEachSpan(filter =>
         {
             filterValid = filter.Invoke();
             if (filterValid.xIsFalse()) return;
@@ -164,7 +162,7 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
         return filterValid;
     }
 
-    private void InvokedParameter()
+    private void SetParameter()
     {
         TRequest parameter = default(TRequest);
 
@@ -175,14 +173,14 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
         }
     }
 
-    private async Task<bool> InvokedValidatingAsync(TRequest parameter)
+    private async Task<bool> ValidateAsync(TRequest parameter)
     {
-        if (_onValidator.xIsNotEmpty())
+        if (_validate.xIsNotEmpty())
         {
-            var rs = await _onValidator().ValidateAsync(parameter);
+            var rs = await _validate().ValidateAsync(parameter);
             if (rs.IsValid.xIsFalse())
             {
-                _validateBehavior(rs);
+                _validateResult(rs);
             }
 
             return rs.IsValid;
@@ -203,7 +201,9 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
             resultBehavior(_service.Result);
         }
     }
-    
+
+    #region [cache]
+
     /// <summary>
     /// {0}:TenantId,
     /// {1}:UserId,
@@ -220,7 +220,7 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
         if (cachedData != null)
         {
             _service.Result = cachedData.xToString().xToEntity<TResult>();
-            _onResult?.Invoke(_service.Result);
+            _then?.Invoke(_service.Result);
             return true;
         }
         return false;
@@ -241,9 +241,10 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
     
     private string GetCacheKey()
     {
-        if(_cacheKey.xIsEmpty()) throw new Exception("cache key is empty");
         return string.Format(KEY_FORMAT, _service.Context.TenantId, _service.Context.CurrentUser.UserId, _cacheKey ?? _service.Request.xToJson().xGetHashCode());
     }
 
+    #endregion
+    
     #endregion [execute core]
 }

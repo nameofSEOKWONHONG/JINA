@@ -7,9 +7,9 @@ namespace Jina.Base.Service.Abstract;
 
 public interface ISetParameter<TRequest, TResult>
 {
-    ISetParameter<TRequest, TResult> UseCache(string cacheKey = null, DistributedCacheEntryOptions cacheEntryOptions = null);
+    ISetParameter<TRequest, TResult> WithCache(string cacheKey = null, DistributedCacheEntryOptions cacheEntryOptions = null);
     
-    IValidation<TRequest, TResult> SetValidator(Func<AbstractValidator<TRequest>> onValidator);
+    IValidation<TRequest, TResult> WithValidator(Func<AbstractValidator<TRequest>> validate);
 
-    void OnExecuted(Action<TResult> result);
+    void Then(Action<TResult> then);
 }
