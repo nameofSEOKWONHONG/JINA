@@ -8,13 +8,13 @@ namespace Jina.Validate;
 
 public static class ValidationExtensions
 {
-    public static Dictionary<string, string> vToKeyValueErrors(this ValidationResult result)
+    public static Dictionary<string, string> vErrors(this ValidationResult result)
     {
         return result.Errors.Select(m => new KeyValuePair<string, string>(key: m.PropertyName, value: m.ErrorMessage))
             .ToDictionary();
     }
 
-    public static List<string> vToErrors(this ValidationResult result)
+    public static List<string> vErrorMessages(this ValidationResult result)
     {
         return result.Errors.Select(m => m.ErrorMessage).ToList();
     }
