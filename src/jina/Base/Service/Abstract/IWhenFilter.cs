@@ -2,9 +2,9 @@
 
 namespace Jina.Base.Service.Abstract;
 
-public interface IWhereFilter<TRequest, TResult>
+public interface IWhenFilter<TRequest, TResult>
 {
-    IWhereFilter<TRequest, TResult> Where(Func<bool> condition);
+    IWhenFilter<TRequest, TResult> When(Func<bool> condition);
 
     ISetParameter<TRequest, TResult> WithParameter(Func<TRequest> parameter);
 }

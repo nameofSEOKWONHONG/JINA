@@ -13,7 +13,7 @@ namespace Jina.Base.Service;
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResult"></typeparam>
 public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
-    , IWhereFilter<TRequest, TResult>
+    , IWhenFilter<TRequest, TResult>
     , ISetParameter<TRequest, TResult>
     , IValidation<TRequest, TResult>
     , IExecutor<TRequest, TResult>
@@ -57,7 +57,7 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
 
     #region [impl chain methods]
 
-    public IWhereFilter<TRequest, TResult> Where(Func<bool> condition)
+    public IWhenFilter<TRequest, TResult> When(Func<bool> condition)
     {
         this._conditions.Add(condition);
         return this;
