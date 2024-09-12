@@ -8,6 +8,7 @@ namespace Jina.Base.Background;
 
 public abstract class BackgroundServiceBase<TSelf> : BackgroundService
 {
+    protected string SelfName = typeof(TSelf).Name;
     protected ILogger<TSelf> Logger { get; set; }
     protected IServiceScopeFactory ServiceScopeFactory { get; set; }
 
@@ -74,16 +75,16 @@ where TRequest : class
             }
             catch (TaskCanceledException taskCanceledException)
             {
-                Logger.LogError(taskCanceledException, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(taskCanceledException, "{ServiceName} Error: {Error}", this.SelfName,
                     taskCanceledException.Message);
             }
             catch (Exception e)
             {
-                Logger.LogError(e, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(e, "{ServiceName} Error: {Error}", this.SelfName,
                     e.Message);
             }
 
-            Logger.LogInformation("{ServiceName} End", typeof(TSelf).Name);
+            Logger.LogInformation("{ServiceName} End", this.SelfName);
 
             await Task.Delay(_interval, stoppingToken);
         }
