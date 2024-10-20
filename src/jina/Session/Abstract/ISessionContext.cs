@@ -4,14 +4,14 @@ using Jina.Database;
 using Jina.Database.Abstract;
 using Jina.Lang.Abstract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Jina.Session.Abstract;
 
 public interface ISessionContext
 {
-    bool IsUnknown => TenantId.xIsEmpty();
-
     string TenantId { get; }
 
     /// <summary>
@@ -41,4 +41,9 @@ public interface ISessionContext
     IFSql FSql { get; }
     
     bool IsDecrypt { get; set; }
+}
+
+public interface ISessionContextInitializer
+{
+    Task InitializeAsync(IdentityUser<string> user);
 }
