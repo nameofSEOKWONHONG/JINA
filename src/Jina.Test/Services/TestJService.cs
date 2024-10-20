@@ -1,16 +1,21 @@
 using eXtensionSharp;
 using Jina.Base.Service;
+using Jina.Session.Abstract;
 using Jina.Validate;
+using Microsoft.Extensions.Logging;
 
 namespace Jina.Test.Services;
 
 public class TestJService
-    : ServiceImplBase<TestJService, Request, string>
+    : ServiceImplCore<TestJService, Request, string>
         , ITestService
 {
-    public TestJService()
+    public TestJService(ILogger<TestJService> logger) : base(logger)
     {
+        
     }
+
+    public ISessionContext Context { get; }
 
     public override Task<bool> OnExecutingAsync()
     {

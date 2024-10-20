@@ -31,16 +31,15 @@ public class Tests
 
         var service = _serviceProvider.GetService<ITestService>();
 
-        await ServiceInvoker<Request, string>.Invoke(service)
-            .AddFilter(() => request.xIsNotEmpty())
-            .SetParameter(() => new()
-            {
-                Name = request
-            })
-            .SetValidator(new RequestValidator())
-            .OnValidated(r => result = r.Errors.Select(m => m.ErrorMessage).First())
-            .OnExecutedAsync(r => result = r); ;
+        using var pipe = new ServicePipeline(null);
+        pipe.Register(service)
+            .When(() => request.xIsNotEmpty())
+            .WithParameter(() => new Request() {Name = request})
+            .WithValidator(() => new RequestValidator())
+            .ThenValidate(r => result = r.Errors.Select(m => m.ErrorMessage).First())
+            .Then(r => result =r);
 
+        await pipe.ExecuteAsync();
         Assert.That(result, Is.EqualTo(expected));
     }
 

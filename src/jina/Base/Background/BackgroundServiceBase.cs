@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2013.Drawing.TimeSlicer;
 using eXtensionSharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -5,20 +6,42 @@ using Microsoft.Extensions.Logging;
 
 namespace Jina.Base.Background;
 
-public abstract class BackgroundServiceBase<TSelf, TRequest> : BackgroundService
-where TSelf : class
+public abstract class BackgroundServiceBase<TSelf> : BackgroundService
 {
+    protected string SelfName = typeof(TSelf).Name;
     protected ILogger<TSelf> Logger { get; set; }
     protected IServiceScopeFactory ServiceScopeFactory { get; set; }
+
+    /// <summary>
+    /// ctor
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="serviceScopeFactory"></param>
+    protected BackgroundServiceBase(ILogger<TSelf> logger, IServiceScopeFactory serviceScopeFactory)
+    {
+        Logger = logger;
+        ServiceScopeFactory = serviceScopeFactory;
+    }
+}
+
+public abstract class BackgroundServiceBase<TSelf, TRequest> : BackgroundServiceBase<TSelf>
+where TSelf : class
+where TRequest : class
+{
     private readonly int _parallelCount;
     private readonly int _interval;
 
-    protected BackgroundServiceBase(ILogger<TSelf> logger, IServiceScopeFactory serviceScopeFactory, int parallelCount, int interval = 1000)
+    /// <summary>
+    /// ctor
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="serviceScopeFactory"></param>
+    /// <param name="parallelCount"></param>
+    /// <param name="interval"></param>
+    protected BackgroundServiceBase(ILogger<TSelf> logger, IServiceScopeFactory serviceScopeFactory, int parallelCount, int interval = 1000):base(logger, serviceScopeFactory)
     {
-        Logger = logger;
         this._parallelCount = parallelCount;
         this._interval = interval;
-        this.ServiceScopeFactory = serviceScopeFactory;
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -52,16 +75,16 @@ where TSelf : class
             }
             catch (TaskCanceledException taskCanceledException)
             {
-                Logger.LogError(taskCanceledException, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(taskCanceledException, "{ServiceName} Error: {Error}", this.SelfName,
                     taskCanceledException.Message);
             }
             catch (Exception e)
             {
-                Logger.LogError(e, "{ServiceName} Error: {Error}", typeof(TSelf).Name,
+                Logger.LogError(e, "{ServiceName} Error: {Error}", this.SelfName,
                     e.Message);
             }
 
-            Logger.LogInformation("{ServiceName} End", typeof(TSelf).Name);
+            Logger.LogInformation("{ServiceName} End", this.SelfName);
 
             await Task.Delay(_interval, stoppingToken);
         }
