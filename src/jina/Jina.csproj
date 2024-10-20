@@ -18,6 +18,8 @@
         <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
 
         <PackageReference Include="ChatGPT.Net" Version="2.0.0" />
+
+        <PackageReference Include="Confluent.Kafka" Version="2.6.0" />
         <PackageReference Include="eXtensionSharp" Version="1.0.1.12" />
         <PackageReference Include="Hangfire" Version="1.8.14" />
         <PackageReference Include="MailKit" Version="4.8.0" />
@@ -55,6 +57,10 @@
         <PackageReference Include="Ardalis.SmartEnum.EFCore" Version="8.1.0" />
 
         <PackageReference Include="MimeKit" Version="4.8.0" />
+
+        <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
+
+        <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.1.1" />
         <PackageReference Include="Npgsql" Version="8.0.5" />
         <PackageReference Include="NRedisStack" Version="0.13.0" />
         <PackageReference Include="RedLock.net" Version="2.3.2" />
