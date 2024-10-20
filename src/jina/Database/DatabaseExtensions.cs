@@ -30,7 +30,7 @@ public static class DatabaseExtensions
             return implType switch
             {
                 ENUM_DB_TYPE.Mssql => sp.GetRequiredService<MsSqlProvider>(),
-                ENUM_DB_TYPE.Mysql => sp.GetRequiredService<MySqlProvider>(),
+                // ENUM_DB_TYPE.Mysql => sp.GetRequiredService<MySqlProvider>(),
                 ENUM_DB_TYPE.Npgsql => sp.GetRequiredService<NpgSqlProvider>(),
                 _ => throw new NotImplementedException()
             };

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using eXtensionSharp;
 using FluentValidation;
 using FluentValidation.Results;
@@ -241,7 +242,7 @@ public class ServiceLoader<TRequest, TResult> : IServiceLoaderBase
     
     private string GetCacheKey()
     {
-        return string.Format(KEY_FORMAT, _service.Context.TenantId, _service.Context.CurrentUser.UserId, _cacheKey ?? _service.Request.xToJson().xGetHashCode());
+        return string.Format(KEY_FORMAT, _service.Context.TenantId, _service.Context.CurrentUser.UserId, _cacheKey ?? JsonSerializer.Serialize(_service.Request).xGetHashCode());
     }
 
     #endregion

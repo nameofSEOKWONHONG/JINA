@@ -7,66 +7,88 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Jint\**" />
-      <EmbeddedResource Remove="Jint\**" />
-      <None Remove="Jint\**" />
+        <Compile Remove="Jint\**" />
+        <EmbeddedResource Remove="Jint\**" />
+        <None Remove="Jint\**" />
     </ItemGroup>
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
-        
-      <PackageReference Include="Azure.Storage.Blobs" Version="12.20.0" />
-      <PackageReference Include="eXtensionSharp" Version="1.0.0.10" />            
-      <PackageReference Include="FreeSql" Version="3.2.825" />            
-      <PackageReference Include="Hangfire" Version="1.8.12" />            
-      <PackageReference Include="MailKit" Version="4.6.0" />            
-      <PackageReference Include="Mapster" Version="7.4.0" />
-      
-      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />      
-      
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />      
-      
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.6" />      
-      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.6" />
-      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.6" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-      
-      <PackageReference Include="MimeKit" Version="4.6.0" />
-      <PackageReference Include="MySql.Data" Version="8.4.0" />
-      <PackageReference Include="Npgsql" Version="8.0.3" />
-      <PackageReference Include="NRedisStack" Version="0.12.0" />
-      <PackageReference Include="RedLock.net" Version="2.3.2" />
-      <PackageReference Include="Scrutor" Version="4.2.2" />
-      <PackageReference Include="Serilog" Version="4.0.0" />
-      <PackageReference Include="ServiceStack.Redis" Version="8.2.2" />
-      
-      <PackageReference Include="Dapper" Version="2.1.35" />
-      <PackageReference Include="Dapper.SimpleCRUD" Version="2.3.0" />
-      <PackageReference Include="Jint" Version="3.1.1" />
 
-      <PackageReference Include="ClosedXML" Version="0.102.2" />
-      
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
+
+        <PackageReference Include="ChatGPT.Net" Version="2.0.0" />
+        <PackageReference Include="eXtensionSharp" Version="1.0.1.12" />
+        <PackageReference Include="Hangfire" Version="1.8.14" />
+        <PackageReference Include="MailKit" Version="4.8.0" />
+        <PackageReference Include="Mapster" Version="7.4.0" />
+
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.10" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+
+
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.10" />
+
+        <PackageReference Include="Ardalis.SmartEnum.EFCore" Version="8.1.0" />
+
+        <PackageReference Include="MimeKit" Version="4.8.0" />
+        <PackageReference Include="Npgsql" Version="8.0.5" />
+        <PackageReference Include="NRedisStack" Version="0.13.0" />
+        <PackageReference Include="RedLock.net" Version="2.3.2" />
+        <PackageReference Include="Scrutor" Version="5.0.1" />
+        <PackageReference Include="Serilog" Version="4.0.2" />
+        <PackageReference Include="ServiceStack.Redis" Version="8.4.0" />
+
+        <PackageReference Include="Dapper" Version="2.1.35" />
+        <PackageReference Include="Dapper.SimpleCRUD" Version="2.3.0" />
+        <PackageReference Include="Jint" Version="4.0.3" />
+
+        <PackageReference Include="ClosedXML" Version="0.104.1" />
+
+        <PackageReference Include="FreeSql" Version="3.2.833" />
+        <PackageReference Include="FreeSql.DbContext" Version="3.2.833" />
+        <PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.833" />
+        <PackageReference Include="FreeSql.Repository" Version="3.2.833" />
+        <PackageReference Include="QuestPDF" Version="2024.10.1" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.6" />
 
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\README.md">
-        <Link>README.md</Link>
-      </Content>
+        <Content Include="..\..\README.md">
+            <Link>README.md</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Base\" />
+        <Folder Include="Application\Base\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Jina.Validate\Jina.Validate.csproj" />
+        <ProjectReference Include="..\Jina.Validate\Jina.Validate.csproj" />
     </ItemGroup>
-    
+
 </Project>
